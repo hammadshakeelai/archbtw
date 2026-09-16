@@ -26,6 +26,15 @@ if [[ $(tty) == /dev/tty1 ]]; then
             fi
             rmdir /run/archbtw-zero
         fi
+
+        # Where the snapshot's memory goes, for the build log.
+        {
+            echo "--- memory at snapshot ---"
+            grep -E '^(MemTotal|MemFree|MemAvailable|Buffers|Cached|Shmem|Slab|SReclaimable|SUnreclaim|KernelStack|PageTables|AnonPages|Mapped):' /proc/meminfo
+            echo "--- largest processes (RSS kB) ---"
+            ps -eo rss=,comm= --sort=-rss | head -12
+            echo "--- end ---"
+        } > /dev/ttyS0 2>&1
     fi
 
     # Tell the snapshot builder (scripts/snapshot.ts) that tty1 has reached a

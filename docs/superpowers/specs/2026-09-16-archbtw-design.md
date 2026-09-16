@@ -1,7 +1,7 @@
 # archbtw — real Arch Linux in the browser
 
 **Date:** 2026-09-16
-**Status:** Approved design
+**Status:** Built and deployed (see "What changed while building it" at the end)
 **Repo:** `hammadshakeelai/archbtw` → https://hammadshakeelai.github.io/archbtw/
 
 ## What this is
@@ -221,3 +221,32 @@ the guest and assert on its output.
 - A `fun` discovery command — the MOTD covers discovery; trivial to add later.
 - Guest networking — impossible on a static host.
 - Persistence between visits — each reload is a fresh VM.
+
+## What changed while building it
+
+The design held; these details changed once they met a real browser, a real
+CI runner and a real guest. Each is explained where it lives in the code.
+
+| Planned | Built | Why |
+|---|---|---|
+| `pacstrap` from a bootstrap tarball | Extract packages with `bsdtar`, then reinstall them with the guest's own `pacman -U` in an i686 chroot | archlinux32 publishes ISOs, not bootstrap tarballs |
+| `toilet`, `mc`, `ranger`, `python`, `git` | Dropped | `toilet` pulls Mesa/LLVM (260 MB); `ranger` pulls Python. The resolver prices every tier before a build |
+| Tetris from `bsd-games` | `snake`, `worm`, `robots`, `hangman`, `atc`, `adventure` | archlinux32's `bsd-games` has no tetris |
+| Default `mkinitcpio` hooks | `base udev modconf 9p_root` | mkinitcpio 40 defaults to the `systemd` hook, under which the busybox-style `9p_root` handler never runs |
+| Snapshot builder reads VGA memory | Rebuilds the screen from `screen-put-char` events | v86 keeps the text buffer in device memory; `read_memory` returns guest RAM |
+| Canvas text in the VGA ROM font | DOM text rows in JetBrains Mono | After a restore the canvas renderer repainted only the cursor row. DOM text also makes output selectable |
+| ~15 MB snapshot | ~41 MB | The boot's page cache and freed memory were captured. The builder now drops caches and zeroes free memory first; the rest is live kernel and process memory, logged by each build |
+| Commit a package lock | Resolve at build time, commit the result | archlinux32 mirrors delete superseded package files within days |
+| Unsigned packages checked by SHA-256 | Signatures verified against Arch Linux 32's keyring, whose master keys are pinned in `rootfs/trusted-keys.txt` | The repo databases the SHA-256 sums come from are unsigned |
+| — | Every systemd timer masked; udev stopped before the snapshot | A visitor resumes long after the snapshot, the clock jumps, and every daily and weekly timer fires at once, reading hundreds of files over the network |
+| — | `nomodeset`; serial getty masked | Keeps the fast VGA text console; a `ttyS0` console otherwise spawns an unreachable login prompt |
+| — | `Ctrl+]` moves focus out of the terminal | v86 takes every key including Tab, so keyboard users couldn't reach the page controls |
+| — | Modifiers released again 100 ms after the keyboard is handed back | On Windows v86 delays Left Ctrl by 10 ms, which left Ctrl stuck down after `Ctrl+]` |
+| Phone keys forwarded as key codes | Printable phone keys sent as text | Phone keyboards report `$` as the 4 key with no Shift |
+| `health.yml` checks mirrors | `health.yml` runs Chromium, Firefox and WebKit on desktop, Android, iPhone and iPad against the live site, and checks the manifest resolves | Deploys gate on Chromium desktop and Android only, to stay fast |
+
+### Known limits
+
+- **Bandwidth.** A first visit downloads about 45 MB (emulator plus snapshot), more as toys fetch their files. GitHub Pages' soft limit of 100 GB a month allows roughly two thousand first visits; repeat visits are mostly served from the browser cache.
+- **Background tabs.** Browsers throttle timers in hidden tabs, which slows the emulator to a crawl until the tab is shown again.
+- **Hardware-keyboard layouts.** v86 translates keys by key code, which assumes a US layout.

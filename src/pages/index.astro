@@ -1,5 +1,26 @@
 ---
+// Served from this site rather than Google Fonts, so loading the page tells no
+// third party who is visiting.
+import "@fontsource/atkinson-hyperlegible-next/400.css";
+import "@fontsource/atkinson-hyperlegible-next/700.css";
+import "@fontsource/atkinson-hyperlegible-mono/400.css";
+
 const base = import.meta.env.BASE_URL.endsWith("/") ? import.meta.env.BASE_URL : `${import.meta.env.BASE_URL}/`;
+
+// Everything comes from this origin. v86 compiles WebAssembly at runtime (its
+// JIT) and decompresses zstd in a worker it creates from a blob URL.
+const contentSecurityPolicy = [
+  "default-src 'self'",
+  "script-src 'self' 'wasm-unsafe-eval'",
+  "worker-src 'self' blob:",
+  "style-src 'self' 'unsafe-inline'",
+  "font-src 'self'",
+  "img-src 'self' data:",
+  "connect-src 'self'",
+  "object-src 'none'",
+  "base-uri 'none'",
+  "form-action 'none'",
+].join("; ");
 const description =
   "A real Arch Linux running in your browser: archlinux32 in the v86 emulator, resumed at a root shell with sl, cmatrix, nyancat, cowsay and more installed.";
 ---
@@ -8,6 +29,8 @@ const description =
 <html lang="en">
   <head>
     <meta charset="utf-8" />
+    <meta http-equiv="Content-Security-Policy" content={contentSecurityPolicy} />
+    <meta name="referrer" content="strict-origin-when-cross-origin" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <title>archbtw: Arch Linux in your browser</title>
     <meta name="description" content={description} />
@@ -16,12 +39,6 @@ const description =
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
     <link rel="icon" href={`${base}favicon.svg`} type="image/svg+xml" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible+Mono:wght@400&family=Atkinson+Hyperlegible+Next:wght@400;700&family=JetBrains+Mono:wght@400&display=swap"
-    />
   </head>
   <body>
     <main
@@ -94,9 +111,12 @@ const description =
 
         --ui: "Atkinson Hyperlegible Next", system-ui, sans-serif;
         --path: "Atkinson Hyperlegible Mono", ui-monospace, monospace;
-        /* The guest's screen. JetBrains Mono covers the box-drawing and block
-           characters that code page 437 programs like pipes and cmatrix draw. */
-        --terminal: "JetBrains Mono", "DejaVu Sans Mono", Consolas, monospace;
+        /* The guest's screen, in the platform's own monospace font. Web font
+           subsets leave out the box-drawing and block characters pipes and
+           cmatrix draw, and a fallback font of another width for just those
+           would knock the columns out of line. These fonts all include them. */
+        --terminal: ui-monospace, "Cascadia Mono", "SF Mono", Menlo, Consolas, "DejaVu Sans Mono", "Noto Sans Mono",
+          monospace;
         color-scheme: dark;
       }
 
@@ -188,9 +208,7 @@ const description =
       }
 
       /* Rows tall enough for descenders: each row's background paints over the
-         row above, so a tighter line height cut "g" and "y" into "o" and "v".
-         JetBrains Mono's box-drawing and block glyphs span this height, so
-         they still join up. */
+         row above, so a tighter line height cut "g" and "y" into "o" and "v". */
       .v86-text {
         white-space: pre;
         font: 15px/19px var(--terminal);

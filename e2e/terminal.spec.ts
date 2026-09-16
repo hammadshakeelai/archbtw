@@ -1,6 +1,16 @@
 import { expect, test } from "@playwright/test";
 import { PROMPT } from "../src/lib/guest.ts";
-import { guestScreen, isTouch, occurrences, paintedScreen, resume, typeKeys, waitForText } from "./helpers.ts";
+import {
+  guardPage,
+  guestScreen,
+  isTouch,
+  occurrences,
+  paintedScreen,
+  resume,
+  typeKeys,
+  waitForLine,
+  waitForText,
+} from "./helpers.ts";
 
 /**
  * Every test here boots the real guest and asserts on what it prints. A page
@@ -19,7 +29,9 @@ test.describe("with a hardware keyboard", () => {
     test.skip(isTouch(testInfo), "touch devices have their own journey");
   });
 
-  test("resume, run toys, leave the terminal, restart", async ({ page }) => {
+  test("resume, run toys, leave the terminal, restart", async ({ page, baseURL }) => {
+    const guard = await guardPage(page, baseURL!);
+
     await test.step("resumes at a root shell with the MOTD painted", async () => {
       await resume(page);
       // Focus starts in the terminal, so typing works without a click.
@@ -28,7 +40,7 @@ test.describe("with a hardware keyboard", () => {
 
     await test.step("runs a command", async () => {
       await typeKeys(page, "echo -e \\\\x62tw\\\\x34\\\\x32\n");
-      await waitForText(page, "btw42", 60_000);
+      await waitForLine(page, "btw42", 60_000);
     });
 
     await test.step("runs a Perl toy, fetching its files over 9p", async () => {
@@ -54,7 +66,7 @@ test.describe("with a hardware keyboard", () => {
     await test.step("clicking the terminal gives it the keyboard back", async () => {
       await page.locator("#stage").click({ position: { x: 20, y: 20 } });
       await typeKeys(page, "echo -e \\\\x62ack\n");
-      await waitForText(page, "back", 60_000);
+      await waitForLine(page, "back", 60_000);
     });
 
     await test.step("Restart brings up a fresh machine", async () => {
@@ -68,6 +80,10 @@ test.describe("with a hardware keyboard", () => {
       await waitForText(page, ".bash_profile");
       expect(await guestScreen(page)).not.toContain("restartcheck");
     });
+
+    await test.step("stayed inside its security policy and its own origin", async () => {
+      await guard.assertClean();
+    });
   });
 });
 
@@ -76,7 +92,9 @@ test.describe("on a touch screen", () => {
     test.skip(!isTouch(testInfo), "needs a touch device");
   });
 
-  test("key bar, phone keyboard symbols and Ctrl", async ({ page }) => {
+  test("key bar, phone keyboard symbols and Ctrl", async ({ page, baseURL }) => {
+    const guard = await guardPage(page, baseURL!);
+
     await test.step("resumes at a root shell with the MOTD painted", async () => {
       await resume(page);
       await expect(page.getByRole("toolbar")).toBeVisible();
@@ -94,7 +112,7 @@ test.describe("on a touch screen", () => {
       await page.getByRole("button", { name: "Tab", exact: true }).tap();
       await keyboard.pressSequentially("tab$((40+2))", { delay: 60 });
       await keyboard.press("Enter");
-      await waitForText(page, "tab42", 60_000);
+      await waitForLine(page, "tab42", 60_000);
     });
 
     await test.step("the Ctrl+C key stops a running command", async () => {
@@ -118,7 +136,11 @@ test.describe("on a touch screen", () => {
 
       await keyboard.pressSequentially("echo ok$((1+1))", { delay: 40 });
       await keyboard.press("Enter");
-      await waitForText(page, "ok2", 60_000);
+      await waitForLine(page, "ok2", 60_000);
+    });
+
+    await test.step("stayed inside its security policy and its own origin", async () => {
+      await guard.assertClean();
     });
   });
 });

@@ -47,16 +47,19 @@ export function chord(modifier: Modifier, letter: string): number[] | null {
 }
 
 /**
- * Release every modifier: both Ctrls, both Alts, both Shifts.
+ * Release both Ctrls and both Alts.
  *
  * Sent whenever the page takes the keyboard away from the guest. Ctrl+], for
  * one, presses Ctrl while the guest has the keyboard and releases it after
  * focus has moved on; without this the guest would think Ctrl was still held
- * and turn the next thing typed into control characters. A release for a key
- * that isn't down is harmless.
+ * and turn the next thing typed into control characters.
+ *
+ * Not Shift: its release code, 0xAA, is also the byte a PS/2 keyboard sends
+ * when it resets, and Linux answers it by reinitialising the keyboard,
+ * dropping the keys that follow.
  */
 export function releaseModifiers(): number[] {
-  return [0x9d, 0xe0, 0x9d, 0xb8, 0xe0, 0xb8, 0xaa, 0xb6];
+  return [0x9d, 0xe0, 0x9d, 0xb8, 0xe0, 0xb8];
 }
 
 export type SoftInput =
