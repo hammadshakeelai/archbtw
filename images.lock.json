@@ -1,7 +1,7 @@
 {
-  "tag": "guest-20260916-3",
+  "tag": "guest-20260916-4",
   "asset": "archbtw-images.tar",
-  "url": "https://github.com/hammadshakeelai/archbtw/releases/download/guest-20260916-3/archbtw-images.tar",
-  "sha256": "de66f43a6b6336c2a69a7152171351ed0087cd0773a1e6f8b9a380bddf3d39c1",
-  "bytes": 224286720
+  "url": "https://github.com/hammadshakeelai/archbtw/releases/download/guest-20260916-4/archbtw-images.tar",
+  "sha256": "1260977823f24d26d70da2eab8899bf14d2d91ee1174cea901be144a65f807ba",
+  "bytes": 212848640
 }
