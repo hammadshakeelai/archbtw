@@ -12,6 +12,9 @@ if [[ $(tty) == /dev/tty1 ]]; then
     # it again. Nothing is printed, so the screen still shows the MOTD.
     if [[ -e /etc/archbtw/snapshot-pending ]]; then
         rm -f /etc/archbtw/snapshot-pending
+        # udev has set up every device this machine will ever have. Left
+        # running, it rereads its rules over 9p after a resume.
+        systemctl stop systemd-udevd-kernel.socket systemd-udevd-control.socket systemd-udevd.service 2>/dev/null
         sync
         echo 3 > /proc/sys/vm/drop_caches
         zero_mb=$(awk '/^MemFree:/ { print int($2 / 1024) - 32 }' /proc/meminfo)

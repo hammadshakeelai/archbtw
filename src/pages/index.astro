@@ -102,9 +102,11 @@ const description =
         font: 15px/1.4 var(--ui);
       }
 
+      /* minmax(0, 1fr) columns so a wide status bar can't widen the page. */
       body {
         display: grid;
         grid-template-rows: minmax(0, 1fr) auto auto;
+        grid-template-columns: minmax(0, 1fr);
         height: 100dvh;
       }
 
@@ -155,10 +157,13 @@ const description =
         width: max-content;
       }
 
-      /* Line height equals font size so block characters stack without gaps. */
+      /* Rows tall enough for descenders: each row's background paints over the
+         row above, so a tighter line height cut "g" and "y" into "o" and "v".
+         JetBrains Mono's box-drawing and block glyphs span this height, so
+         they still join up. */
       .v86-text {
         white-space: pre;
-        font: 16px/16px var(--terminal);
+        font: 15px/19px var(--terminal);
         color: var(--vga-grey);
       }
 
@@ -312,6 +317,13 @@ const description =
       @media (max-width: 640px) {
         .status {
           gap: 10px;
+          padding-left: 10px;
+          padding-right: 10px;
+        }
+
+        .actions {
+          flex: none;
+          gap: 6px;
         }
 
         .fetched,

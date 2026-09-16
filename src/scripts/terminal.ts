@@ -65,9 +65,13 @@ function render(state: MachineState): void {
 
   if (state.kind === "resuming") {
     stateLabel.textContent = "Downloading the machine";
-    const expected = Math.max(state.expectedMB, state.downloadedMB);
-    fetched.textContent = expected > 0 ? `${formatMB(state.downloadedMB)} of ${formatMB(expected)}` : "";
-    progress.style.width = expected > 0 ? `${Math.min(100, (state.downloadedMB / expected) * 100)}%` : "0";
+    // GitHub Pages compresses some responses and then sends no length, so a
+    // total is only shown when the server reported one still ahead of us.
+    const knownTotal = state.expectedMB > state.downloadedMB;
+    fetched.textContent = knownTotal
+      ? `${formatMB(state.downloadedMB)} of ${formatMB(state.expectedMB)}`
+      : `${formatMB(state.downloadedMB)} downloaded`;
+    progress.style.width = knownTotal ? `${(state.downloadedMB / state.expectedMB) * 100}%` : "0";
   } else {
     fetched.textContent = `${formatMB(state.downloadedMB)} downloaded`;
     stateLabel.textContent = "Running";

@@ -208,6 +208,14 @@ for unit in systemd-firstboot.service systemd-homed-firstboot.service systemd-ho
     in_chroot systemctl mask "$unit" >/dev/null 2>&1 || true
 done
 
+# Every timer. A visitor resumes the snapshot hours or weeks after it was
+# taken, the guest's clock jumps forward, and every daily and weekly timer
+# (keyring sync, shadow checks, tmpfiles cleanup) fires at once, reading
+# hundreds of files over the network in the visitor's first minute.
+for timer in "$ROOTFS"/usr/lib/systemd/system/*.timer; do
+    in_chroot systemctl mask "$(basename "$timer")" >/dev/null 2>&1 || true
+done
+
 log "Building the initramfs"
 KVER=$(ls "$ROOTFS/usr/lib/modules" | grep -v '^extramodules' | head -1)
 [[ -n $KVER ]] || die "no kernel modules directory; did the linux package install?"
