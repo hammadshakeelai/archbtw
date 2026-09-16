@@ -20,7 +20,7 @@ const description =
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible+Mono:wght@400&family=Atkinson+Hyperlegible+Next:wght@400;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible+Mono:wght@400&family=Atkinson+Hyperlegible+Next:wght@400;700&family=JetBrains+Mono:wght@400&display=swap"
     />
   </head>
   <body>
@@ -83,6 +83,9 @@ const description =
 
         --ui: "Atkinson Hyperlegible Next", system-ui, sans-serif;
         --path: "Atkinson Hyperlegible Mono", ui-monospace, monospace;
+        /* The guest's screen. JetBrains Mono covers the box-drawing and block
+           characters that code page 437 programs like pipes and cmatrix draw. */
+        --terminal: "JetBrains Mono", "DejaVu Sans Mono", Consolas, monospace;
         color-scheme: dark;
       }
 
@@ -135,10 +138,13 @@ const description =
         cursor: text;
       }
 
+      /* Clipped to its own size, which fitScreen sets to the scaled screen: until
+         the first fit it is 0 by 0, so the unscaled screen can't add scrollbars. */
       .screen-sizer {
         position: relative;
         margin: auto;
         flex: none;
+        overflow: hidden;
       }
 
       .v86-screen {
@@ -149,9 +155,10 @@ const description =
         width: max-content;
       }
 
+      /* Line height equals font size so block characters stack without gaps. */
       .v86-text {
         white-space: pre;
-        font: 16px/16px monospace;
+        font: 16px/16px var(--terminal);
         color: var(--vga-grey);
       }
 

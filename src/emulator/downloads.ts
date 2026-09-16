@@ -3,14 +3,24 @@ const MEGABYTE = 1024 * 1024;
 /** Adds up bytes downloaded across files; v86 reports progress per file. */
 export class DownloadMeter {
   private readonly loaded = new Map<string, number>();
+  private readonly sizes = new Map<string, number>();
 
-  record(file: string, loaded: number): void {
+  /** `total` is the file's size when the server reported one, otherwise 0. */
+  record(file: string, loaded: number, total = 0): void {
     this.loaded.set(file, Math.max(loaded, this.loaded.get(file) ?? 0));
+    if (total > 0) this.sizes.set(file, total);
   }
 
   megabytes(): number {
     let total = 0;
     for (const bytes of this.loaded.values()) total += bytes;
+    return total / MEGABYTE;
+  }
+
+  /** What the files seen so far add up to once finished; files of unknown size count as far as they've got. */
+  expectedMegabytes(): number {
+    let total = 0;
+    for (const [file, bytes] of this.loaded) total += Math.max(bytes, this.sizes.get(file) ?? 0);
     return total / MEGABYTE;
   }
 }

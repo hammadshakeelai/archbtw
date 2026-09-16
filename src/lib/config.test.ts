@@ -22,6 +22,10 @@ describe("v86Options", () => {
     expect(options.acpi).toBe(GUEST.acpi);
   });
 
+  it("draws text as DOM rows, which repaint fully after a restore", () => {
+    expect(options.screen).toEqual({ container, use_graphical_text: false });
+  });
+
   it("finds the BIOS under the base path", () => {
     expect(options.bios).toEqual({ url: "/archbtw/bios/seabios.bin" });
     expect(options.vga_bios).toEqual({ url: "/archbtw/bios/vgabios.bin" });

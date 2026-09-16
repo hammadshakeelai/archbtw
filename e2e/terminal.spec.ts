@@ -28,6 +28,9 @@ test("resumes at a root shell with the MOTD", async ({ page }) => {
   await waitForPrompt(page);
   await expect(page.locator("#state")).toHaveText("Running");
   expect(await screen(page)).toContain("Things to try");
+  // What the visitor sees, not just what the guest holds: a renderer that
+  // repaints only the cursor row after a restore once left the MOTD blank.
+  await expect(page.locator(".v86-text")).toContainText("Things to try", { timeout: 15_000 });
 });
 
 test("runs real commands typed on a keyboard", async ({ page }) => {

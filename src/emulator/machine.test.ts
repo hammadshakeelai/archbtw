@@ -85,7 +85,7 @@ describe("Machine", () => {
     await machine.start({});
     expect(states.at(-1)?.kind).toBe("resuming");
     emulators[0].emit("download-progress", progress(4 * MB, 16 * MB));
-    expect(states.at(-1)).toEqual({ kind: "resuming", downloadedMB: 4 });
+    expect(states.at(-1)).toEqual({ kind: "resuming", downloadedMB: 4, expectedMB: 16 });
     emulators[0].emit("emulator-started");
     expect(states.at(-1)).toEqual({ kind: "running", downloadedMB: 4 });
   });

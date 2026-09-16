@@ -5,7 +5,7 @@ export type MachineError = "download" | "stalled" | "no-wasm";
 export type MachineState =
   | { kind: "idle" }
   /** Fetching the emulator and the snapshot; nothing on screen yet. */
-  | { kind: "resuming"; downloadedMB: number }
+  | { kind: "resuming"; downloadedMB: number; expectedMB: number }
   | { kind: "running"; downloadedMB: number }
   | { kind: "error"; error: MachineError; downloadedMB: number };
 
@@ -75,7 +75,7 @@ export class Machine {
     }
     this.meter = new DownloadMeter();
     this.stall = new StallWatch(STALL_MS);
-    this.setState({ kind: "resuming", downloadedMB: 0 });
+    this.setState({ kind: "resuming", downloadedMB: 0, expectedMB: 0 });
 
     const emulator = await this.deps.create(options);
     // A restart while v86 was still loading makes this emulator stale.
@@ -86,9 +86,11 @@ export class Machine {
     this.emulator = emulator;
 
     emulator.add_listener("download-progress", (progress) => {
-      this.meter.record(progress.file_name, progress.loaded);
+      this.meter.record(progress.file_name, progress.loaded, progress.lengthComputable ? progress.total : 0);
       this.stall.progress(progress.file_name, progress.loaded, progress.total, progress.lengthComputable, this.deps.now());
-      if (this.state.kind === "resuming" || this.state.kind === "running") {
+      if (this.state.kind === "resuming") {
+        this.setState({ ...this.state, downloadedMB: this.meter.megabytes(), expectedMB: this.meter.expectedMegabytes() });
+      } else if (this.state.kind === "running") {
         this.setState({ ...this.state, downloadedMB: this.meter.megabytes() });
       }
     });

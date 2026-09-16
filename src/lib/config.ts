@@ -24,9 +24,10 @@ export function v86Options(runtime: Runtime, container: HTMLElement): Record<str
     acpi: GUEST.acpi,
     filesystem: { baseurl: images + IMAGE_PATHS.tree },
     initial_state: { url: images + IMAGE_PATHS.state },
-    // Draw text with the VGA ROM font rather than a web font, so box drawing
-    // and block characters look the same on every device.
-    screen: { container, use_graphical_text: true },
+    // Text as DOM rows rather than v86's canvas renderer: after a snapshot
+    // restore the canvas renderer repainted only the cursor row, leaving the
+    // MOTD blank. DOM text also lets visitors select and copy output.
+    screen: { container, use_graphical_text: false },
     // bash rings the PC speaker on every failed tab completion.
     disable_speaker: true,
     autostart: true,

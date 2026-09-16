@@ -12,6 +12,13 @@ describe("DownloadMeter", () => {
     expect(meter.megabytes()).toBe(3);
   });
 
+  it("expects each file's reported size, or what arrived when the size is unknown", () => {
+    const meter = new DownloadMeter();
+    meter.record("state", 10 * MB, 50 * MB);
+    meter.record("wasm", 2 * MB);
+    expect(meter.expectedMegabytes()).toBe(52);
+  });
+
   it("ignores a lower count for a file", () => {
     const meter = new DownloadMeter();
     meter.record("a", 2 * MB);

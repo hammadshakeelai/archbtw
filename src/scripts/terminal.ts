@@ -42,9 +42,6 @@ const ERRORS: Record<string, string> = {
     "This browser can't run the emulator because it doesn't support WebAssembly. Open this page in a current version of Firefox, Chrome, Safari or Edge.",
 };
 
-/** Roughly what resuming downloads: the emulator, the BIOS and the compressed snapshot. */
-const RESUME_ESTIMATE_MB = 20;
-
 function formatMB(megabytes: number): string {
   return `${megabytes < 10 ? megabytes.toFixed(1) : Math.round(megabytes)} MB`;
 }
@@ -66,11 +63,13 @@ function render(state: MachineState): void {
   }
   if (state.kind === "idle") return;
 
-  fetched.textContent = `${formatMB(state.downloadedMB)} downloaded`;
   if (state.kind === "resuming") {
     stateLabel.textContent = "Downloading the machine";
-    progress.style.width = `${Math.min(100, (state.downloadedMB / RESUME_ESTIMATE_MB) * 100)}%`;
+    const expected = Math.max(state.expectedMB, state.downloadedMB);
+    fetched.textContent = expected > 0 ? `${formatMB(state.downloadedMB)} of ${formatMB(expected)}` : "";
+    progress.style.width = expected > 0 ? `${Math.min(100, (state.downloadedMB / expected) * 100)}%` : "0";
   } else {
+    fetched.textContent = `${formatMB(state.downloadedMB)} downloaded`;
     stateLabel.textContent = "Running";
     progress.style.width = "0";
   }
