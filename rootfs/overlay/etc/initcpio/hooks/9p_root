@@ -1,0 +1,16 @@
+#!/usr/bin/ash
+# Mount the real root from the 9p filesystem v86 serves, instead of a block
+# device. Adapted from v86's docs/archlinux.md.
+
+run_hook() {
+    mount_handler="mount_9p_root"
+}
+
+mount_9p_root() {
+    msg ":: mounting host9p on real root"
+    if ! mount -t 9p -o trans=virtio,version=9p2000.L,cache=loose,rw host9p "$1"; then
+        echo "archbtw: could not mount the 9p root filesystem."
+        echo "You are now being dropped into an emergency shell."
+        launch_interactive_shell
+    fi
+}

@@ -1,0 +1,1841 @@
+{
+  "mirror": "https://de.mirror.archlinux32.org",
+  "arch": "i686",
+  "generated": "2026-09-16T08:21:29.211Z",
+  "installedSize": 952788342,
+  "downloadSize": 250999736,
+  "packages": [
+    {
+      "name": "acl",
+      "repo": "core",
+      "version": "2.4.0-1.0",
+      "filename": "acl-2.4.0-1.0-i686.pkg.tar.zst",
+      "sha256": "77155db4e9d3415eb6b63c2658fb9cea7aefe9183011e6cecc7814c912c1c603",
+      "installedSize": 354984
+    },
+    {
+      "name": "archlinux32-keyring",
+      "repo": "core",
+      "version": "20251214-1.0",
+      "filename": "archlinux32-keyring-20251214-1.0-any.pkg.tar.zst",
+      "sha256": "7600cd9ddabbbbb5643b0235646670d070a4848030fbe10c77939ea3aeee29a0",
+      "installedSize": 49593
+    },
+    {
+      "name": "argon2",
+      "repo": "core",
+      "version": "20190702-6.0",
+      "filename": "argon2-20190702-6.0-i686.pkg.tar.zst",
+      "sha256": "4ca03170e0b36eaae1c7e93c14a821f8bcf981b82bbee23911db44ccc05a5602",
+      "installedSize": 119676
+    },
+    {
+      "name": "asciiquarium",
+      "repo": "extra",
+      "version": "1.1-7.0",
+      "filename": "asciiquarium-1.1-7.0-any.pkg.tar.zst",
+      "sha256": "4f6a8ba7d6099ad7d9291dfba1467d02987ef20063e8603dfd9dd81b3d5ea4c3",
+      "installedSize": 28739
+    },
+    {
+      "name": "attr",
+      "repo": "core",
+      "version": "2.6.0-1.0",
+      "filename": "attr-2.6.0-1.0-i686.pkg.tar.zst",
+      "sha256": "11b9cd74f9dbd2ce40f94397c0c3e49a605dab6c68e2f6f8763060ddffc8962a",
+      "installedSize": 220982
+    },
+    {
+      "name": "audit",
+      "repo": "core",
+      "version": "3.0.9-2.0",
+      "filename": "audit-3.0.9-2.0-i686.pkg.tar.zst",
+      "sha256": "64dd331ae4e4eb7f14398951da71a16eff5d5ee8f70744131c79792e772bfd9c",
+      "installedSize": 1056488
+    },
+    {
+      "name": "base",
+      "repo": "core",
+      "version": "3-3.0",
+      "filename": "base-3-3.0-any.pkg.tar.zst",
+      "sha256": "8272148e6184d8e3bb2d3ab948d188e4eb1ba2145c5f963c0f968314cbd0b251",
+      "installedSize": 0
+    },
+    {
+      "name": "bash",
+      "repo": "core",
+      "version": "5.3.9-1.1",
+      "filename": "bash-5.3.9-1.1-i686.pkg.tar.zst",
+      "sha256": "8ff7830c5fe703e912eb0fc5ba2c090ff07b891898ad0737c56c7816706c7a1c",
+      "installedSize": 9983200
+    },
+    {
+      "name": "bc",
+      "repo": "extra",
+      "version": "1.08.2-1.0",
+      "filename": "bc-1.08.2-1.0-i686.pkg.tar.zst",
+      "sha256": "95538b681b7a2cba266c42c48050f5eec554ebb27604db20bedcfda649ec98ad",
+      "installedSize": 163542
+    },
+    {
+      "name": "binutils",
+      "repo": "core",
+      "version": "2.46-1.5",
+      "filename": "binutils-2.46-1.5-i686.pkg.tar.zst",
+      "sha256": "a495f4dd4702fed97034c199df86cb16f8b9520fd7e2c2a03b886754c7cf76b4",
+      "installedSize": 41320642
+    },
+    {
+      "name": "brotli",
+      "repo": "core",
+      "version": "1.1.0-1.0",
+      "filename": "brotli-1.1.0-1.0-i686.pkg.tar.zst",
+      "sha256": "f4be75194acd92a9f9450a7c265872b54a0c64a69b469407698af24fb38a738f",
+      "installedSize": 989262
+    },
+    {
+      "name": "bsd-games",
+      "repo": "extra",
+      "version": "3.3-2.0",
+      "filename": "bsd-games-3.3-2.0-i686.pkg.tar.zst",
+      "sha256": "f8546b903c06ff24842d7496b852ad4b9115e301c853c6cbb3f822c211db84b5",
+      "installedSize": 633885
+    },
+    {
+      "name": "bzip2",
+      "repo": "core",
+      "version": "1.0.8-6.3",
+      "filename": "bzip2-1.0.8-6.3-i686.pkg.tar.zst",
+      "sha256": "6e6e5b82d844f12bccb0c58d4fedde076d5b19fa1fc9e018f0fab03304b5cdf3",
+      "installedSize": 142359
+    },
+    {
+      "name": "ca-certificates",
+      "repo": "core",
+      "version": "20240618-1.0",
+      "filename": "ca-certificates-20240618-1.0-any.pkg.tar.zst",
+      "sha256": "72dd0e45fe4b4d24e94c43595be61e6c8739128787ae06c1f6d5ed00c4f43280",
+      "installedSize": 0
+    },
+    {
+      "name": "ca-certificates-mozilla",
+      "repo": "core",
+      "version": "3.107-1.0",
+      "filename": "ca-certificates-mozilla-3.107-1.0-i686.pkg.tar.zst",
+      "sha256": "a69026caf02c4d313d2b724e4d12492e72d4a73663f1fc71867daa8eba57b4f9",
+      "installedSize": 1081145
+    },
+    {
+      "name": "ca-certificates-utils",
+      "repo": "core",
+      "version": "20240618-1.0",
+      "filename": "ca-certificates-utils-20240618-1.0-any.pkg.tar.zst",
+      "sha256": "6f9242cbe0ae5a41d537ef8e321d1f8517418b354ddc8e07c3cf2897ce2a3280",
+      "installedSize": 13957
+    },
+    {
+      "name": "cmatrix",
+      "repo": "extra",
+      "version": "2.0-4.0",
+      "filename": "cmatrix-2.0-4.0-i686.pkg.tar.zst",
+      "sha256": "1f2dbbaa36f7c21a5a6ee414ee77e66348e65a8818607a7dba780a58140c0890",
+      "installedSize": 92429
+    },
+    {
+      "name": "coreutils",
+      "repo": "core",
+      "version": "9.11-2.0",
+      "filename": "coreutils-9.11-2.0-i686.pkg.tar.zst",
+      "sha256": "8754c113d7e886e9795fbfe60e39c75bb0184729b33ae591f0d245cbbc529fe2",
+      "installedSize": 17548994
+    },
+    {
+      "name": "cowsay",
+      "repo": "extra",
+      "version": "3.8.4-1.0",
+      "filename": "cowsay-3.8.4-1.0-any.pkg.tar.zst",
+      "sha256": "4246a8256ba2432a21a2420ba81302cdce681ded1223c712a68bae506971144e",
+      "installedSize": 38598
+    },
+    {
+      "name": "cryptsetup",
+      "repo": "core",
+      "version": "2.7.2-1.1",
+      "filename": "cryptsetup-2.7.2-1.1-i686.pkg.tar.zst",
+      "sha256": "4cdbd1e72bf900bb1b5a66d1638f51bec1323c6e77a62fa27e9ca1482cd0fdcb",
+      "installedSize": 2933236
+    },
+    {
+      "name": "curl",
+      "repo": "core",
+      "version": "7.87.0-3.0",
+      "filename": "curl-7.87.0-3.0-i686.pkg.tar.zst",
+      "sha256": "41bf640d26d32578da3530f12d79ae2f42c85f6a5404430d0fe7d8fdd4c11d92",
+      "installedSize": 1977423
+    },
+    {
+      "name": "db5.3",
+      "repo": "core",
+      "version": "5.3.28-7.1",
+      "filename": "db5.3-5.3.28-7.1-i686.pkg.tar.zst",
+      "sha256": "2e748253c4bfbfd6b9429ced65c896d0dce278ede41c2d5e4fec72af6e9d8333",
+      "installedSize": 6594283
+    },
+    {
+      "name": "dbus",
+      "repo": "core",
+      "version": "1.14.10-2.1",
+      "filename": "dbus-1.14.10-2.1-i686.pkg.tar.zst",
+      "sha256": "fe1e491ea1411d823ef0733d442cc68781aa6c03399ca9704e835846316bbea3",
+      "installedSize": 893803
+    },
+    {
+      "name": "dbus-daemon-units",
+      "repo": "core",
+      "version": "1.14.10-2.1",
+      "filename": "dbus-daemon-units-1.14.10-2.1-i686.pkg.tar.zst",
+      "sha256": "57d779c637e426ac6aaedf584fde40e4b2d620042888a1bda3fbcf928d2d4dcb",
+      "installedSize": 820
+    },
+    {
+      "name": "device-mapper",
+      "repo": "core",
+      "version": "2.03.39-1.0",
+      "filename": "device-mapper-2.03.39-1.0-i686.pkg.tar.zst",
+      "sha256": "5d84a44595edab45a54cc0cd0632bc664ec296a7d34081a432b1b6aeaf14fb5e",
+      "installedSize": 791833
+    },
+    {
+      "name": "diffutils",
+      "repo": "core",
+      "version": "3.12-2.0",
+      "filename": "diffutils-3.12-2.0-i686.pkg.tar.zst",
+      "sha256": "391eee44335ddd8c08436c73935bd1d085533d030155a45486fa48120bbc4be9",
+      "installedSize": 1557544
+    },
+    {
+      "name": "e2fsprogs",
+      "repo": "core",
+      "version": "1.47.2-1.0",
+      "filename": "e2fsprogs-1.47.2-1.0-i686.pkg.tar.zst",
+      "sha256": "6b6662ed9bf19ac6a8c237ac5089221c22b9e882d45f425169fd6f612568dce0",
+      "installedSize": 5469319
+    },
+    {
+      "name": "expat",
+      "repo": "core",
+      "version": "2.8.4-1.0",
+      "filename": "expat-2.8.4-1.0-i686.pkg.tar.zst",
+      "sha256": "e2f75eb9f36ca96b0054d355ac644d6fe39be5af37098739d4ec9fe4057056ef",
+      "installedSize": 522727
+    },
+    {
+      "name": "fastfetch",
+      "repo": "extra",
+      "version": "2.61.0-1.0",
+      "filename": "fastfetch-2.61.0-1.0-i686.pkg.tar.zst",
+      "sha256": "4e8783d0c3aca7f40afa4317eeb0a69121b75a022cc24d25583da3a241c56cd6",
+      "installedSize": 1709297
+    },
+    {
+      "name": "figlet",
+      "repo": "extra",
+      "version": "2.2.5-6.0",
+      "filename": "figlet-2.2.5-6.0-i686.pkg.tar.zst",
+      "sha256": "31c27a37a5e290c15ea8e87cd548d894786804b9d268138e85c1f001242d8d06",
+      "installedSize": 651609
+    },
+    {
+      "name": "file",
+      "repo": "core",
+      "version": "5.47-1.0",
+      "filename": "file-5.47-1.0-i686.pkg.tar.zst",
+      "sha256": "424e638b11e487d6c1bff6faf6930ab204fe0ac4632cf99887772e18b89f3340",
+      "installedSize": 10887694
+    },
+    {
+      "name": "filesystem",
+      "repo": "core",
+      "version": "2025.10.12-1.0",
+      "filename": "filesystem-2025.10.12-1.0-any.pkg.tar.zst",
+      "sha256": "704e0809cc193717ad50ae2ffe42e6681f95e6867b0a7abde0855f6f79784e50",
+      "installedSize": 24555
+    },
+    {
+      "name": "findutils",
+      "repo": "core",
+      "version": "4.11.0-1.0",
+      "filename": "findutils-4.11.0-1.0-i686.pkg.tar.zst",
+      "sha256": "5dd36fb2f8f7c4c36297b1c8569ebbf0617e1afbbf3cfcc0fc9133d4660fd4e2",
+      "installedSize": 1889247
+    },
+    {
+      "name": "fish",
+      "repo": "extra",
+      "version": "3.7.1-2.0",
+      "filename": "fish-3.7.1-2.0-i686.pkg.tar.zst",
+      "sha256": "95e2422942684ef9a8f3323a601539d1a0170cff169646c8e39c46f110a46ee4",
+      "installedSize": 15349935
+    },
+    {
+      "name": "fortune-mod",
+      "repo": "extra",
+      "version": "3.26.1-1.0",
+      "filename": "fortune-mod-3.26.1-1.0-i686.pkg.tar.zst",
+      "sha256": "3688c1ea100ea5c1ed51274d696e1e048023673fd07174bd4f3196bf62eebc75",
+      "installedSize": 3023721
+    },
+    {
+      "name": "gawk",
+      "repo": "core",
+      "version": "5.4.1-1.0",
+      "filename": "gawk-5.4.1-1.0-i686.pkg.tar.zst",
+      "sha256": "78fb6a3aa0865ac6039fe44e9ce7a8bb04d1bcb39283b0d14280e663732b1dde",
+      "installedSize": 4199282
+    },
+    {
+      "name": "gc",
+      "repo": "core",
+      "version": "8.2.12-1.0",
+      "filename": "gc-8.2.12-1.0-i686.pkg.tar.zst",
+      "sha256": "35717c43228be3a3e22efea42e65633c6dcb8fb8571fb49a78b9b28cc4f090df",
+      "installedSize": 776655
+    },
+    {
+      "name": "gcc-libs",
+      "repo": "core",
+      "version": "15.2.1+r604+g0b99615a8aef-1.1",
+      "filename": "gcc-libs-15.2.1+r604+g0b99615a8aef-1.1-i686.pkg.tar.zst",
+      "sha256": "9a0842c4595aa55ebfdc896fc899736eefe7a337d6e0582e700c38bc56432fd7",
+      "installedSize": 0
+    },
+    {
+      "name": "gdbm",
+      "repo": "core",
+      "version": "1.23-1.0",
+      "filename": "gdbm-1.23-1.0-i686.pkg.tar.zst",
+      "sha256": "5a282fa74572004799b70c9a32acec7822387f43be617a6fdd884c1459a41375",
+      "installedSize": 802751
+    },
+    {
+      "name": "gettext",
+      "repo": "core",
+      "version": "1.0-2.0",
+      "filename": "gettext-1.0-2.0-i686.pkg.tar.zst",
+      "sha256": "5e08aa88ca45af7b988397d733e3df51105911df5aba50b49c7c3a583cd9dd02",
+      "installedSize": 22373384
+    },
+    {
+      "name": "glib2",
+      "repo": "core",
+      "version": "2.80.0-2.0",
+      "filename": "glib2-2.80.0-2.0-i686.pkg.tar.zst",
+      "sha256": "4b45e426334c08774773925966ab412929db9ce4c5e470aa744f6c8dafb7e9c6",
+      "installedSize": 37597602
+    },
+    {
+      "name": "glibc",
+      "repo": "core",
+      "version": "2.43+r5+g856c426a7534-1.4",
+      "filename": "glibc-2.43+r5+g856c426a7534-1.4-i686.pkg.tar.zst",
+      "sha256": "3d516501d8fa317aa05b772ea994f6a321be899d20b06980be6d9e0114d5e008",
+      "installedSize": 45089594
+    },
+    {
+      "name": "gmp",
+      "repo": "core",
+      "version": "6.3.0-3.0",
+      "filename": "gmp-6.3.0-3.0-i686.pkg.tar.zst",
+      "sha256": "fecbd85899aa8d4f8ecba8fed33f35a7cfb700a80f5a2e4deeec868fee4a2fc6",
+      "installedSize": 973844
+    },
+    {
+      "name": "gnulib-l10n",
+      "repo": "core",
+      "version": "20241231-1.0",
+      "filename": "gnulib-l10n-20241231-1.0-any.pkg.tar.zst",
+      "sha256": "f059ac916c482f387bfa0a6874b1f783ee0dccb814ef471c723a89e6c4c0afe6",
+      "installedSize": 644166
+    },
+    {
+      "name": "gnupg",
+      "repo": "core",
+      "version": "2.4.8-1.0",
+      "filename": "gnupg-2.4.8-1.0-i686.pkg.tar.zst",
+      "sha256": "6a216ab4374fedb13699fcf410c1bac6471730f40eafae01b0e36c2df3755420",
+      "installedSize": 10345638
+    },
+    {
+      "name": "gnutls",
+      "repo": "core",
+      "version": "3.8.13-2.0",
+      "filename": "gnutls-3.8.13-2.0-i686.pkg.tar.zst",
+      "sha256": "4f56d9c3be0555776fac9dace082ba993ce0d9cde78393640b6c45b700283e37",
+      "installedSize": 8338730
+    },
+    {
+      "name": "gpgme",
+      "repo": "core",
+      "version": "2.0.1-1.0",
+      "filename": "gpgme-2.0.1-1.0-i686.pkg.tar.zst",
+      "sha256": "33e39185274a1fa22f9123108b759fb7231e17b41e4f9f5c266a73c1f60e1a25",
+      "installedSize": 689476
+    },
+    {
+      "name": "gpgme-1",
+      "repo": "core",
+      "version": "1.24.3-4.1",
+      "filename": "gpgme-1-1.24.3-4.1-i686.pkg.tar.zst",
+      "sha256": "e450fa1af9d3f9dace2abaec43fef35dc820a6247a939bd9d09b81f67b70c719",
+      "installedSize": 955488
+    },
+    {
+      "name": "gpm",
+      "repo": "core",
+      "version": "1.20.7.r38.ge82d1a6-6.0",
+      "filename": "gpm-1.20.7.r38.ge82d1a6-6.0-i686.pkg.tar.zst",
+      "sha256": "4e0cefbb2b4a3c7cb058b06e769e37944be23028be7ea783d398d3c2c51d12b9",
+      "installedSize": 372855
+    },
+    {
+      "name": "grep",
+      "repo": "core",
+      "version": "3.12-2.1",
+      "filename": "grep-3.12-2.1-i686.pkg.tar.zst",
+      "sha256": "954269701f522905697466fa333ea47e493e377f4e40b337c8c536a0c01efe1e",
+      "installedSize": 951916
+    },
+    {
+      "name": "gzip",
+      "repo": "core",
+      "version": "1.14-2.1",
+      "filename": "gzip-1.14-2.1-i686.pkg.tar.zst",
+      "sha256": "53f300f9081f4434518e1138fc3a6511bd268a0c3b656b75e2aa7831d86bb38c",
+      "installedSize": 153660
+    },
+    {
+      "name": "htop",
+      "repo": "extra",
+      "version": "3.2.1-1.0",
+      "filename": "htop-3.2.1-1.0-i686.pkg.tar.zst",
+      "sha256": "dc4185e32658d57630106fa1eca0bb08f421b162c3c5e28c8065435672cd7ac1",
+      "installedSize": 378388
+    },
+    {
+      "name": "hwdata",
+      "repo": "core",
+      "version": "0.410-1.0",
+      "filename": "hwdata-0.410-1.0-any.pkg.tar.zst",
+      "sha256": "b433855c4be18b0dd64ec6be7a4b34f4edc0d8eadcbbfc7e938c18fc80ffb4e9",
+      "installedSize": 10511152
+    },
+    {
+      "name": "iana-etc",
+      "repo": "core",
+      "version": "20260617-1.0",
+      "filename": "iana-etc-20260617-1.0-any.pkg.tar.zst",
+      "sha256": "e9c97fc00667649144ded7893588fc7fbf9e99fb577fb039279dbe3ea3a9bfdb",
+      "installedSize": 4213221
+    },
+    {
+      "name": "icu",
+      "repo": "core",
+      "version": "78.3-1.0",
+      "filename": "icu-78.3-1.0-i686.pkg.tar.zst",
+      "sha256": "0ae5fa15bc254c38b0b69b34fb725fd5120d48952898c6d04f9a93d1b26deee8",
+      "installedSize": 45233328
+    },
+    {
+      "name": "icu67",
+      "repo": "core",
+      "version": "67.1-1.3",
+      "filename": "icu67-67.1-1.3-i686.pkg.tar.zst",
+      "sha256": "0d87fa6130b3b1b35e72f3540d2d166791bafa4c5df80aed10c7a62480ffc9ce",
+      "installedSize": 33998329
+    },
+    {
+      "name": "iproute2",
+      "repo": "core",
+      "version": "6.19.0-2.0",
+      "filename": "iproute2-6.19.0-2.0-i686.pkg.tar.zst",
+      "sha256": "84c3449d66e4799255766b87a8c850539d59c8232d6e75fa20f5ceb6aa549b9f",
+      "installedSize": 3073655
+    },
+    {
+      "name": "iptables-nft",
+      "repo": "core",
+      "version": "1:1.8.11-2.0",
+      "filename": "iptables-nft-1:1.8.11-2.0-i686.pkg.tar.zst",
+      "sha256": "95709ede651a24777e67527589cf4135553389d47bf3b7fbeab20ee88a249c5c",
+      "installedSize": 2329695
+    },
+    {
+      "name": "iputils",
+      "repo": "core",
+      "version": "20250605-1.4",
+      "filename": "iputils-20250605-1.4-i686.pkg.tar.zst",
+      "sha256": "f1dcb8f98da7aba95d48b900826b0c7c0c83ac6ca971306862897ffc3fa3ca10",
+      "installedSize": 674219
+    },
+    {
+      "name": "jansson",
+      "repo": "core",
+      "version": "2.15.1-1.0",
+      "filename": "jansson-2.15.1-1.0-i686.pkg.tar.zst",
+      "sha256": "44f7505ddf0c2cc0b9be78fdfb5bb03eceee4f8b84bd57006862a30d1c109b3b",
+      "installedSize": 266139
+    },
+    {
+      "name": "json-c",
+      "repo": "core",
+      "version": "0.19-1.0",
+      "filename": "json-c-0.19-1.0-i686.pkg.tar.zst",
+      "sha256": "ecf2ef82f7e7ffefa9fe85ce0cfe97d8009d4d7410cb248bf6994256131e9ec4",
+      "installedSize": 198318
+    },
+    {
+      "name": "kbd",
+      "repo": "core",
+      "version": "2.10.0-1.0",
+      "filename": "kbd-2.10.0-1.0-i686.pkg.tar.zst",
+      "sha256": "e0b4649e2e70862ce63967280d7bd2f4fe530d1f2266a51b2ff453ff4155f3a8",
+      "installedSize": 3342701
+    },
+    {
+      "name": "keyutils",
+      "repo": "core",
+      "version": "1.6.3-4.0",
+      "filename": "keyutils-1.6.3-4.0-i686.pkg.tar.zst",
+      "sha256": "86579b80c4fe08d47d773c2f795080a03f299a9d8e3e02e0db87f15b70ae4115",
+      "installedSize": 192429
+    },
+    {
+      "name": "kmod",
+      "repo": "core",
+      "version": "34.2-1.1",
+      "filename": "kmod-34.2-1.1-i686.pkg.tar.zst",
+      "sha256": "d8c64cae46d408f174deaf4546718d007aa0a1951d867a0485878fb47f0a9d5c",
+      "installedSize": 345426
+    },
+    {
+      "name": "krb5",
+      "repo": "core",
+      "version": "1.20.1-1.0",
+      "filename": "krb5-1.20.1-1.0-i686.pkg.tar.zst",
+      "sha256": "327c9735375bd246e7c4889cfb002a25d69391c56d960528260e09445e10a861",
+      "installedSize": 4745423
+    },
+    {
+      "name": "leancrypto",
+      "repo": "core",
+      "version": "1.8.0-1.0",
+      "filename": "leancrypto-1.8.0-1.0-i686.pkg.tar.zst",
+      "sha256": "05ef1beab7f84a9c4bcb90eb6d365176d7cfe831c8b0bb7a24c716491769104a",
+      "installedSize": 5565525
+    },
+    {
+      "name": "less",
+      "repo": "core",
+      "version": "1:704-1.0",
+      "filename": "less-1:704-1.0-i686.pkg.tar.zst",
+      "sha256": "2ef07890505015ed0b192d2779a86fe5578295b913116e7cf693a686f346b188",
+      "installedSize": 335929
+    },
+    {
+      "name": "libarchive",
+      "repo": "core",
+      "version": "3.8.1-1.1",
+      "filename": "libarchive-3.8.1-1.1-i686.pkg.tar.zst",
+      "sha256": "0f2356241bea87104c88c8b8aed37e089e09c4494bd1754bfe7e04c4ea0436e8",
+      "installedSize": 1272394
+    },
+    {
+      "name": "libasan",
+      "repo": "core",
+      "version": "15.2.1+r604+g0b99615a8aef-1.1",
+      "filename": "libasan-15.2.1+r604+g0b99615a8aef-1.1-i686.pkg.tar.zst",
+      "sha256": "1368c9bdf6e31e6f7eea9d4ab494c6f60ad835d05ce5b339d0c7396826c668a2",
+      "installedSize": 1661916
+    },
+    {
+      "name": "libassuan",
+      "repo": "core",
+      "version": "3.0.0-1.2",
+      "filename": "libassuan-3.0.0-1.2-i686.pkg.tar.zst",
+      "sha256": "f4ad5587e55eb339b1f1d7b3e43586b3ec22890cad19016982c72fd00c57c38e",
+      "installedSize": 244496
+    },
+    {
+      "name": "libatomic",
+      "repo": "core",
+      "version": "15.2.1+r604+g0b99615a8aef-1.1",
+      "filename": "libatomic-15.2.1+r604+g0b99615a8aef-1.1-i686.pkg.tar.zst",
+      "sha256": "a9cc5949581276d83fd832c2ebc612aeb54b931408d4ffd281e3a4cb00a41e7b",
+      "installedSize": 29292
+    },
+    {
+      "name": "libbpf",
+      "repo": "core",
+      "version": "1.6.2-1.0",
+      "filename": "libbpf-1.6.2-1.0-i686.pkg.tar.zst",
+      "sha256": "c14609846967a673a5f1a4923d5977a4202b40d310ddc4002f5c845cc0c3fa3c",
+      "installedSize": 847070
+    },
+    {
+      "name": "libcap",
+      "repo": "core",
+      "version": "2.78-1.0",
+      "filename": "libcap-2.78-1.0-i686.pkg.tar.zst",
+      "sha256": "5b80e8ead97bc0f2617d449d7303334131e9f03c588c1f80e2925cdc9fb97180",
+      "installedSize": 238320
+    },
+    {
+      "name": "libcap-ng",
+      "repo": "core",
+      "version": "0.8.5-1.0",
+      "filename": "libcap-ng-0.8.5-1.0-i686.pkg.tar.zst",
+      "sha256": "932b49ab8bc7874742a0b695e53d0f3d5b0bd87e055a63b894b713aa6314334a",
+      "installedSize": 114961
+    },
+    {
+      "name": "libcurl-compat",
+      "repo": "core",
+      "version": "7.87.0-3.0",
+      "filename": "libcurl-compat-7.87.0-3.0-i686.pkg.tar.zst",
+      "sha256": "991a333b0ffd08069aa6ebc30dc38584b9d0fe83149a3aa1b208db1127be2f5f",
+      "installedSize": 723360
+    },
+    {
+      "name": "libelf",
+      "repo": "core",
+      "version": "0.188-1.0",
+      "filename": "libelf-0.188-1.0-i686.pkg.tar.zst",
+      "sha256": "6f8d366217b039e9f349b7baee83c51690a4f999db49388b0efb82e5826ba9a6",
+      "installedSize": 2810112
+    },
+    {
+      "name": "libevent",
+      "repo": "core",
+      "version": "2.1.13-2.0",
+      "filename": "libevent-2.1.13-2.0-i686.pkg.tar.zst",
+      "sha256": "918a545b4bf9ae51c2fbd62a9379d23f64b0b3424ab9da347a41e1dd5247da14",
+      "installedSize": 1239922
+    },
+    {
+      "name": "libffi",
+      "repo": "core",
+      "version": "3.8.0-1.0",
+      "filename": "libffi-3.8.0-1.0-i686.pkg.tar.zst",
+      "sha256": "7331ceb6fab87ffab74bbd7bc7dc4193608bc981003df4c81def3f7b1c95635c",
+      "installedSize": 108679
+    },
+    {
+      "name": "libgcc",
+      "repo": "core",
+      "version": "15.2.1+r604+g0b99615a8aef-1.1",
+      "filename": "libgcc-15.2.1+r604+g0b99615a8aef-1.1-i686.pkg.tar.zst",
+      "sha256": "480a94a14a5548e908423629bd01302ac629f842a8258c4aa11f37087e4f9440",
+      "installedSize": 213932
+    },
+    {
+      "name": "libgcrypt",
+      "repo": "core",
+      "version": "1.12.2-1.0",
+      "filename": "libgcrypt-1.12.2-1.0-i686.pkg.tar.zst",
+      "sha256": "ad67b2b554eac1488a0cebdedf22baa77d4cce7d90d9df4825eaaeac560e53fd",
+      "installedSize": 1503224
+    },
+    {
+      "name": "libgfortran",
+      "repo": "core",
+      "version": "15.2.1+r604+g0b99615a8aef-1.1",
+      "filename": "libgfortran-15.2.1+r604+g0b99615a8aef-1.1-i686.pkg.tar.zst",
+      "sha256": "9ce1aedf6944ad2d739949bb59771caf6bda66355191d449dd0215e580411054",
+      "installedSize": 3155132
+    },
+    {
+      "name": "libgomp",
+      "repo": "core",
+      "version": "15.2.1+r604+g0b99615a8aef-1.1",
+      "filename": "libgomp-15.2.1+r604+g0b99615a8aef-1.1-i686.pkg.tar.zst",
+      "sha256": "b164d584a4f286535bafdbbc1018a7088be1a0cd323eea19aa9ed74156eefefb",
+      "installedSize": 415118
+    },
+    {
+      "name": "libgpg-error",
+      "repo": "core",
+      "version": "1.61-1.0",
+      "filename": "libgpg-error-1.61-1.0-i686.pkg.tar.zst",
+      "sha256": "9e44876a9b130e2c8201d2e0c29bcbe50596a8820508b3758f4120f3b91df478",
+      "installedSize": 1180412
+    },
+    {
+      "name": "libidn2",
+      "repo": "core",
+      "version": "2.3.4-3.1",
+      "filename": "libidn2-2.3.4-3.1-i686.pkg.tar.zst",
+      "sha256": "7a54a497d135cd56fe38c1acf5bce0e9a3e9feb20bd22ed322e1638c9bd9bba1",
+      "installedSize": 462953
+    },
+    {
+      "name": "libksba",
+      "repo": "core",
+      "version": "1.8.1-1.0",
+      "filename": "libksba-1.8.1-1.0-i686.pkg.tar.zst",
+      "sha256": "c82cb1c6d0e726e6cd9c8f444ce50b518c0e03c5a1320399ee10876c93a77c5c",
+      "installedSize": 318127
+    },
+    {
+      "name": "libldap",
+      "repo": "core",
+      "version": "2.6.6-1.0",
+      "filename": "libldap-2.6.6-1.0-i686.pkg.tar.zst",
+      "sha256": "2086c27af3682d4a589232a46f0b53d5f35cd98e7b5b0da22d5deeb97861c402",
+      "installedSize": 716983
+    },
+    {
+      "name": "liblsan",
+      "repo": "core",
+      "version": "15.2.1+r604+g0b99615a8aef-1.1",
+      "filename": "liblsan-15.2.1+r604+g0b99615a8aef-1.1-i686.pkg.tar.zst",
+      "sha256": "249429cac122571639c162c9f2eb1971bb603b8671ecd0092bc2bcac9adf2b18",
+      "installedSize": 3324
+    },
+    {
+      "name": "libmakepkg-dropins",
+      "repo": "core",
+      "version": "20-2.0",
+      "filename": "libmakepkg-dropins-20-2.0-any.pkg.tar.zst",
+      "sha256": "d31623db936b3bd6e15083bf752f863f6246f2aba19645d393798a7d14119020",
+      "installedSize": 11493
+    },
+    {
+      "name": "libmnl",
+      "repo": "core",
+      "version": "1.0.5-2.0",
+      "filename": "libmnl-1.0.5-2.0-i686.pkg.tar.zst",
+      "sha256": "8e8087be5d2b61746f94c5d08db59f12a0a8ee77b05162a45cf644e5c6bee035",
+      "installedSize": 34356
+    },
+    {
+      "name": "libnetfilter_conntrack",
+      "repo": "core",
+      "version": "1.1.1-1.0",
+      "filename": "libnetfilter_conntrack-1.1.1-1.0-i686.pkg.tar.zst",
+      "sha256": "439e4f6bac927534eb70fd10f27f3ff31b6e52526298d27c42632c1e6ca3d4a0",
+      "installedSize": 163437
+    },
+    {
+      "name": "libnfnetlink",
+      "repo": "core",
+      "version": "1.0.2-2.0",
+      "filename": "libnfnetlink-1.0.2-2.0-i686.pkg.tar.zst",
+      "sha256": "f5879fb969b3fa94b166c889d49ce986de9d47d8d64eae88f93424aca449f011",
+      "installedSize": 42652
+    },
+    {
+      "name": "libnftnl",
+      "repo": "core",
+      "version": "1.3.1-1.0",
+      "filename": "libnftnl-1.3.1-1.0-i686.pkg.tar.zst",
+      "sha256": "34e845199c394ae5eabbce45131261cad5abbe1a8c9e983c3ba4115b8ee98e81",
+      "installedSize": 260540
+    },
+    {
+      "name": "libnghttp2",
+      "repo": "core",
+      "version": "1.70.0-1.0",
+      "filename": "libnghttp2-1.70.0-1.0-i686.pkg.tar.zst",
+      "sha256": "3ad04bd1989936929d375cdbe38b815de57e1780caf4e5a15e7bf8e9cf5419a2",
+      "installedSize": 411739
+    },
+    {
+      "name": "libnl",
+      "repo": "core",
+      "version": "3.12.0-1.0",
+      "filename": "libnl-3.12.0-1.0-i686.pkg.tar.zst",
+      "sha256": "082a2eb1c5d9be065ce668aea868bd32f675a394948fe765cd5e9f1ea20f71dc",
+      "installedSize": 2177069
+    },
+    {
+      "name": "libobjc",
+      "repo": "core",
+      "version": "15.2.1+r604+g0b99615a8aef-1.1",
+      "filename": "libobjc-15.2.1+r604+g0b99615a8aef-1.1-i686.pkg.tar.zst",
+      "sha256": "74f1a40f6ce9992e05706202d95010ea5d5107f61ac47b0584c8bdb2dc444da8",
+      "installedSize": 88532
+    },
+    {
+      "name": "libp11-kit",
+      "repo": "core",
+      "version": "0.26.5-1.0",
+      "filename": "libp11-kit-0.26.5-1.0-i686.pkg.tar.zst",
+      "sha256": "270054cfd2b2ea96291bc00632db226e7a3080e5baca7bb7ee9ae2a0df56fe2f",
+      "installedSize": 3428844
+    },
+    {
+      "name": "libpcap",
+      "repo": "core",
+      "version": "1.10.2-1.0",
+      "filename": "libpcap-1.10.2-1.0-i686.pkg.tar.zst",
+      "sha256": "39c585819b8fbfbd84eb7091b59410d929e36becdecbd03956f01e5e0762fbb9",
+      "installedSize": 662496
+    },
+    {
+      "name": "libpsl",
+      "repo": "core",
+      "version": "0.21.2-1.0",
+      "filename": "libpsl-0.21.2-1.0-i686.pkg.tar.zst",
+      "sha256": "75152f6c4a64833ed95ab809357ae2cd7a777722b5aa731d615f254a91623449",
+      "installedSize": 199708
+    },
+    {
+      "name": "libquadmath",
+      "repo": "core",
+      "version": "15.2.1+r604+g0b99615a8aef-1.1",
+      "filename": "libquadmath-15.2.1+r604+g0b99615a8aef-1.1-i686.pkg.tar.zst",
+      "sha256": "dc60b63c3cb5bae4aa13a27463d6ee1033e89a2eed93c3308b903d9d216c7fdd",
+      "installedSize": 626674
+    },
+    {
+      "name": "libsasl",
+      "repo": "core",
+      "version": "2.1.28-3.0",
+      "filename": "libsasl-2.1.28-3.0-i686.pkg.tar.zst",
+      "sha256": "b9c806c80a47181d8c4df28150adab6be72a02de963247deba4381ba863e5c84",
+      "installedSize": 547428
+    },
+    {
+      "name": "libseccomp",
+      "repo": "core",
+      "version": "2.5.5-2.0",
+      "filename": "libseccomp-2.5.5-2.0-i686.pkg.tar.zst",
+      "sha256": "60c0301af9a441f233b74ad7cd04cdac03fe23c7ab489c0622baa3c4de7c8a42",
+      "installedSize": 258675
+    },
+    {
+      "name": "libsecret",
+      "repo": "core",
+      "version": "0.21.7-1.1",
+      "filename": "libsecret-0.21.7-1.1-i686.pkg.tar.zst",
+      "sha256": "fc289cc0d20c9153e4ec5799a13e28df62a8d0a8b9006480e04e3988abed1c3d",
+      "installedSize": 1194373
+    },
+    {
+      "name": "libssh2",
+      "repo": "core",
+      "version": "1.11.1-7.0",
+      "filename": "libssh2-1.11.1-7.0-i686.pkg.tar.zst",
+      "sha256": "c48242879d2951516fd5088d415f83fec10553dd8c3d3e02d87ff399945b85c8",
+      "installedSize": 497258
+    },
+    {
+      "name": "libstdc++",
+      "repo": "core",
+      "version": "15.2.1+r604+g0b99615a8aef-1.1",
+      "filename": "libstdc++-15.2.1+r604+g0b99615a8aef-1.1-i686.pkg.tar.zst",
+      "sha256": "a53dabe5519d40980b9a092103e3187d7b4f916fae48bf8a3d8aef8a16609626",
+      "installedSize": 2582667
+    },
+    {
+      "name": "libsysprof-capture",
+      "repo": "extra",
+      "version": "3.48.0-4.0",
+      "filename": "libsysprof-capture-3.48.0-4.0-i686.pkg.tar.zst",
+      "sha256": "c246d40d4e46333ff3855abcc7cef5dde6d08548b9df3680b17fa696374e75e4",
+      "installedSize": 228233
+    },
+    {
+      "name": "libtasn1",
+      "repo": "core",
+      "version": "4.21.0-1.0",
+      "filename": "libtasn1-4.21.0-1.0-i686.pkg.tar.zst",
+      "sha256": "7036d41c2dc3f9bc828530de0b1546e57620737e309ea9e55f1903e348c8af25",
+      "installedSize": 273909
+    },
+    {
+      "name": "libtirpc",
+      "repo": "core",
+      "version": "1.3.7-1.0",
+      "filename": "libtirpc-1.3.7-1.0-i686.pkg.tar.zst",
+      "sha256": "94fd9f4c288f5247e3d88796394acd89ec78c0b6ed316b161446fbf3ff0952c6",
+      "installedSize": 436684
+    },
+    {
+      "name": "libtsan",
+      "repo": "core",
+      "version": "15.2.1+r604+g0b99615a8aef-1.1",
+      "filename": "libtsan-15.2.1+r604+g0b99615a8aef-1.1-i686.pkg.tar.zst",
+      "sha256": "8cb6749d00fced639a134fbe9dfa3005cdb9eaebc6635402fc5d5d9a3ef714e5",
+      "installedSize": 0
+    },
+    {
+      "name": "libubsan",
+      "repo": "core",
+      "version": "15.2.1+r604+g0b99615a8aef-1.1",
+      "filename": "libubsan-15.2.1+r604+g0b99615a8aef-1.1-i686.pkg.tar.zst",
+      "sha256": "2295715ec7c7fbc603f01657bf4dddcc47fcbc86e86997c7e0e32e2bd6dabcf6",
+      "installedSize": 519200
+    },
+    {
+      "name": "libunistring",
+      "repo": "core",
+      "version": "1.4.2-1.0",
+      "filename": "libunistring-1.4.2-1.0-i686.pkg.tar.zst",
+      "sha256": "7e05e0dfda37afbd0460c7e2571d87a2c95dd2ccec2e9b5c7346d4e6b2d03fb2",
+      "installedSize": 2837076
+    },
+    {
+      "name": "libusb",
+      "repo": "core",
+      "version": "1.0.26-1.0",
+      "filename": "libusb-1.0.26-1.0-i686.pkg.tar.zst",
+      "sha256": "a644a40d618c6e9c4469a8152b0009274ff1b50b67decc4b371bab59d360f6cb",
+      "installedSize": 219564
+    },
+    {
+      "name": "libutempter",
+      "repo": "extra",
+      "version": "1.2.1-4.0",
+      "filename": "libutempter-1.2.1-4.0-i686.pkg.tar.zst",
+      "sha256": "21de882c089374a8f0afaa53ffadd79e6d2ece2917535a3f5f2ee3e2441f2d28",
+      "installedSize": 30753
+    },
+    {
+      "name": "libutil-linux",
+      "repo": "core",
+      "version": "2.36-3.0",
+      "filename": "libutil-linux-2.36-3.0-i686.pkg.tar.zst",
+      "sha256": "dccfaa220f3d8dc9c1e6caedf44b12e73488753deae53be87583f37e9d8cd3d9",
+      "installedSize": 1614228
+    },
+    {
+      "name": "libverto",
+      "repo": "core",
+      "version": "0.3.2-6.0",
+      "filename": "libverto-0.3.2-6.0-i686.pkg.tar.zst",
+      "sha256": "ccb59d51515fab965b1c31edc5e719c3e57e139b33dcf5a2105a4f082df1ede2",
+      "installedSize": 64650
+    },
+    {
+      "name": "libxcrypt",
+      "repo": "core",
+      "version": "4.5.2-1.0",
+      "filename": "libxcrypt-4.5.2-1.0-i686.pkg.tar.zst",
+      "sha256": "a93a4172aab2a365414a032084949578e6ea0d3d28c170c0ce44a0892e18004b",
+      "installedSize": 219541
+    },
+    {
+      "name": "libxcrypt-compat",
+      "repo": "core",
+      "version": "4.5.2-1.0",
+      "filename": "libxcrypt-compat-4.5.2-1.0-i686.pkg.tar.zst",
+      "sha256": "67f6008d7c6ed5c0f0456fa2313e9b548deeb816bb0d7e8802df390992f477da",
+      "installedSize": 210228
+    },
+    {
+      "name": "libxml2",
+      "repo": "core",
+      "version": "2.15.1-4.0",
+      "filename": "libxml2-2.15.1-4.0-i686.pkg.tar.zst",
+      "sha256": "9c00fdc9d77d96ba613930be6af9d15446be4ef8397b8afab07c5627138158d6",
+      "installedSize": 1701260
+    },
+    {
+      "name": "libyaml",
+      "repo": "extra",
+      "version": "0.2.5-3.0",
+      "filename": "libyaml-0.2.5-3.0-i686.pkg.tar.zst",
+      "sha256": "6fe5f4ec51215a2c9832ad5fe83353c29f87298cb916f4042ef30d9274c2524e",
+      "installedSize": 179944
+    },
+    {
+      "name": "licenses",
+      "repo": "core",
+      "version": "20240728-1.1",
+      "filename": "licenses-20240728-1.1-any.pkg.tar.zst",
+      "sha256": "f2b371e6dea83b6f3d97558e6ac224d290c7df559b955e7ff7b1c94671227c07",
+      "installedSize": 1617309
+    },
+    {
+      "name": "linux",
+      "repo": "core",
+      "version": "6.19.11.arch1-1.0",
+      "filename": "linux-6.19.11.arch1-1.0-i686.pkg.tar.zst",
+      "sha256": "b27dd5a75fe3b4b8c86f70bc35774b80f8d21479be5d937db51037fa67c905e1",
+      "installedSize": 236273438
+    },
+    {
+      "name": "linux-api-headers",
+      "repo": "core",
+      "version": "7.2-1.0",
+      "filename": "linux-api-headers-7.2-1.0-i686.pkg.tar.zst",
+      "sha256": "0bbf1806ee797f11802744f36b005307c964c3db9db01f03a682a82dc9ec3c1b",
+      "installedSize": 7339005
+    },
+    {
+      "name": "lolcat",
+      "repo": "extra",
+      "version": "100.0.1-1.1",
+      "filename": "lolcat-100.0.1-1.1-any.pkg.tar.zst",
+      "sha256": "c46386f61235e5a51e214b7de07f67c20918dfaa7444827446290c90c63f3809",
+      "installedSize": 137803
+    },
+    {
+      "name": "lynx",
+      "repo": "extra",
+      "version": "2.9.3-1.0",
+      "filename": "lynx-2.9.3-1.0-i686.pkg.tar.zst",
+      "sha256": "2c6962f2ada24589d545a2428c2797dc3528d7cfc85e251014cef373e890dea6",
+      "installedSize": 5334691
+    },
+    {
+      "name": "lz4",
+      "repo": "core",
+      "version": "1:1.10.0-2.0",
+      "filename": "lz4-1:1.10.0-2.0-i686.pkg.tar.zst",
+      "sha256": "1966d636e3c07845e57587a0e44d8b49a24ee3ef289557005c502848c863a683",
+      "installedSize": 446408
+    },
+    {
+      "name": "mkinitcpio",
+      "repo": "core",
+      "version": "40-4.0",
+      "filename": "mkinitcpio-40-4.0-any.pkg.tar.zst",
+      "sha256": "3c7084b13b596a38a4b318e8f612424a7434def04b341a63a2e0badad0c819e2",
+      "installedSize": 215772
+    },
+    {
+      "name": "mkinitcpio-busybox",
+      "repo": "core",
+      "version": "1.36.1-1.0",
+      "filename": "mkinitcpio-busybox-1.36.1-1.0-i686.pkg.tar.zst",
+      "sha256": "0eb6ee80485bd5b94a147ed4aa73a6dee7fd6174ade4be1d8ba2b5c8018c6a0e",
+      "installedSize": 506440
+    },
+    {
+      "name": "mpfr",
+      "repo": "core",
+      "version": "4.2.2-1.0",
+      "filename": "mpfr-4.2.2-1.0-i686.pkg.tar.zst",
+      "sha256": "bfe0ca7e0248456c1e73c75f0cc1b07238877721e312d478ce70633ae9cf2fd1",
+      "installedSize": 1107747
+    },
+    {
+      "name": "nano",
+      "repo": "core",
+      "version": "9.2-1.0",
+      "filename": "nano-9.2-1.0-i686.pkg.tar.zst",
+      "sha256": "97bea4782f456256aa7e5024ab221fc6944df80e9dd866cbabc9adf16dce6b06",
+      "installedSize": 2832608
+    },
+    {
+      "name": "ncurses",
+      "repo": "core",
+      "version": "6.4_20230520-3.0",
+      "filename": "ncurses-6.4_20230520-3.0-i686.pkg.tar.zst",
+      "sha256": "1686625a67555a8d97ade9adfcf8eb59eeeba73cddd4143a3c1562d97f073965",
+      "installedSize": 4021736
+    },
+    {
+      "name": "neofetch",
+      "repo": "extra",
+      "version": "7.1.0-2.0",
+      "filename": "neofetch-7.1.0-2.0-any.pkg.tar.zst",
+      "sha256": "cc2fcab135c9e8f837148676e2c916d55a3c7f3f53c958739e2277a411c54023",
+      "installedSize": 347269
+    },
+    {
+      "name": "nettle",
+      "repo": "core",
+      "version": "4.0-1.0",
+      "filename": "nettle-4.0-1.0-i686.pkg.tar.zst",
+      "sha256": "b8594314b325679439285517b6602ae007f704a736782a6547c90a8ab561daea",
+      "installedSize": 1029222
+    },
+    {
+      "name": "nftables",
+      "repo": "extra",
+      "version": "1:1.1.3-1.0",
+      "filename": "nftables-1:1.1.3-1.0-i686.pkg.tar.zst",
+      "sha256": "a4f8001d9acda346fb3e492ea6c8a231880ed160a1ee0298e676850253918772",
+      "installedSize": 1064041
+    },
+    {
+      "name": "npth",
+      "repo": "core",
+      "version": "1.8-1.0",
+      "filename": "npth-1.8-1.0-i686.pkg.tar.zst",
+      "sha256": "17888763d1526136f7f38a988d6612e8d803976b7de53415198c32f72612468c",
+      "installedSize": 87561
+    },
+    {
+      "name": "nyancat",
+      "repo": "extra",
+      "version": "1.5.2-3.0",
+      "filename": "nyancat-1.5.2-3.0-i686.pkg.tar.zst",
+      "sha256": "769a6a80d4acdcbc651e0b0257a9ac40dcc5574abe3494bed1480ff4e1378481",
+      "installedSize": 38767
+    },
+    {
+      "name": "openssl",
+      "repo": "core",
+      "version": "3.6.4-1.0",
+      "filename": "openssl-3.6.4-1.0-i686.pkg.tar.zst",
+      "sha256": "ec521a9850d063407677fa14dbcca4fce45c83afbfb30c75b227b66374dbd6da",
+      "installedSize": 11062364
+    },
+    {
+      "name": "openssl-1.1",
+      "repo": "core",
+      "version": "1.1.1.w-2.0",
+      "filename": "openssl-1.1-1.1.1.w-2.0-i686.pkg.tar.zst",
+      "sha256": "fdc2edf0bb9fcfe8c6a82dd3930b8f39fd695ffbddbd58de8f959a7d69c8851e",
+      "installedSize": 4754532
+    },
+    {
+      "name": "p11-kit",
+      "repo": "core",
+      "version": "0.26.5-1.0",
+      "filename": "p11-kit-0.26.5-1.0-i686.pkg.tar.zst",
+      "sha256": "7bd44e8abab7c44709bc6e5a29b9ba606cd2b496f7c4423e2616ae431d48b42e",
+      "installedSize": 1109638
+    },
+    {
+      "name": "pacman",
+      "repo": "core",
+      "version": "7.1.0.r9.g54d9411-1.6",
+      "filename": "pacman-7.1.0.r9.g54d9411-1.6-i686.pkg.tar.zst",
+      "sha256": "05e7a96657a50b4c71b6c83ca1452353ec056bee7d4750bd794c4343f74fc4d8",
+      "installedSize": 5148516
+    },
+    {
+      "name": "pacman-mirrorlist",
+      "repo": "core",
+      "version": "20260322-1.2",
+      "filename": "pacman-mirrorlist-20260322-1.2-any.pkg.tar.zst",
+      "sha256": "ec010f31fd54b125b86660b5cb652219b87820edc315cc1e949295d674e16ea8",
+      "installedSize": 1500
+    },
+    {
+      "name": "pam",
+      "repo": "core",
+      "version": "1.5.2-1.0",
+      "filename": "pam-1.5.2-1.0-i686.pkg.tar.zst",
+      "sha256": "a550a967ce82842d6c6a152bf7b98e725dc50a9ea95603c1e6588814e5a57433",
+      "installedSize": 2826994
+    },
+    {
+      "name": "pambase",
+      "repo": "core",
+      "version": "20260616-1.0",
+      "filename": "pambase-20260616-1.0-any.pkg.tar.zst",
+      "sha256": "205331437cc8f904b68e335dc089f858b50e074636d1f43bcfb76aa300183c94",
+      "installedSize": 2794
+    },
+    {
+      "name": "pciutils",
+      "repo": "core",
+      "version": "3.15.0-1.0",
+      "filename": "pciutils-3.15.0-1.0-i686.pkg.tar.zst",
+      "sha256": "e483c60b43f1ab22bc1bbd934cf219be77c308e0524767a57ca9ab17d23ae970",
+      "installedSize": 416848
+    },
+    {
+      "name": "pcre2",
+      "repo": "core",
+      "version": "10.48-1.0",
+      "filename": "pcre2-10.48-1.0-i686.pkg.tar.zst",
+      "sha256": "ed446e35f38ed1181c9c13faf77921cd4d03d0dc90cfa9b4ee3b43648f8a2196",
+      "installedSize": 6995415
+    },
+    {
+      "name": "perl",
+      "repo": "core",
+      "version": "5.36.0-3.0",
+      "filename": "perl-5.36.0-3.0-i686.pkg.tar.zst",
+      "sha256": "18ef52dfb699edc825ee31f48b1d0780372b2c3c364e148a07ab79857274cd05",
+      "installedSize": 55993410
+    },
+    {
+      "name": "perl-curses",
+      "repo": "extra",
+      "version": "1.44-1.0",
+      "filename": "perl-curses-1.44-1.0-i686.pkg.tar.zst",
+      "sha256": "19a199796fcfa8f7cec218e0793a0f957a1b162dd211e7aa6667afed7aec5ab0",
+      "installedSize": 241748
+    },
+    {
+      "name": "perl-term-animation",
+      "repo": "extra",
+      "version": "2.6-14.0",
+      "filename": "perl-term-animation-2.6-14.0-any.pkg.tar.zst",
+      "sha256": "276f22af81463079cb8730acabba7aa7a8768baf840c4b1c8ce57ae46c807e79",
+      "installedSize": 59091
+    },
+    {
+      "name": "pinentry",
+      "repo": "core",
+      "version": "1.3.1-5.5",
+      "filename": "pinentry-1.3.1-5.5-i686.pkg.tar.zst",
+      "sha256": "d7b935eecc1ed95e01c420d50d09275129647b75819382237717bd2823944e0e",
+      "installedSize": 716696
+    },
+    {
+      "name": "popt",
+      "repo": "core",
+      "version": "1.19-2.0",
+      "filename": "popt-1.19-2.0-i686.pkg.tar.zst",
+      "sha256": "d01d870c08eadc57e44ad9ca6e9aa58b5a6af36170bbca64b24f010df8e582e7",
+      "installedSize": 223034
+    },
+    {
+      "name": "procps-ng",
+      "repo": "core",
+      "version": "4.0.6-1.1",
+      "filename": "procps-ng-4.0.6-1.1-i686.pkg.tar.zst",
+      "sha256": "9bd8573e783d1b2b1d865e892b80d1df6be3b40d62090095b4bcb1bfe9534105",
+      "installedSize": 2603055
+    },
+    {
+      "name": "psmisc",
+      "repo": "core",
+      "version": "23.7-2.0",
+      "filename": "psmisc-23.7-2.0-i686.pkg.tar.zst",
+      "sha256": "286dac7d31697fbfbe77e03373dba6aebc3c180421256174d31f85ad02986c7b",
+      "installedSize": 786269
+    },
+    {
+      "name": "pv",
+      "repo": "extra",
+      "version": "1.11.0-1.0",
+      "filename": "pv-1.11.0-1.0-i686.pkg.tar.zst",
+      "sha256": "31d3cf8950e8e17d6c1bc8d68a5f83e777984da69d95e4f83d0bdf7fe8495887",
+      "installedSize": 373816
+    },
+    {
+      "name": "readline",
+      "repo": "core",
+      "version": "8.3.003-1.0",
+      "filename": "readline-8.3.003-1.0-i686.pkg.tar.zst",
+      "sha256": "7a8d51cf4b31230ae54272cac315ebb51071d74beb561e397fd0d80be9b730a9",
+      "installedSize": 1516621
+    },
+    {
+      "name": "recode",
+      "repo": "extra",
+      "version": "3.7.15-1.0",
+      "filename": "recode-3.7.15-1.0-i686.pkg.tar.zst",
+      "sha256": "479d541d5d2a155db1855b6507d7a793c252f10ada7b8fec0d3881633e7e1ec1",
+      "installedSize": 1038483
+    },
+    {
+      "name": "ruby",
+      "repo": "extra",
+      "version": "3.0.4-20.0",
+      "filename": "ruby-3.0.4-20.0-i686.pkg.tar.zst",
+      "sha256": "04f42f81a75018f45e0a36bd0176cf36e1f22296c82fca7cc4e6a38dc11beaf5",
+      "installedSize": 12205836
+    },
+    {
+      "name": "ruby-abbrev",
+      "repo": "extra",
+      "version": "0.1.0-4.0",
+      "filename": "ruby-abbrev-0.1.0-4.0-any.pkg.tar.zst",
+      "sha256": "7f6e4bc05e434cf7cf910424a3a14ce687e497f8f4a77f1d6a112ce16c149319",
+      "installedSize": 13202
+    },
+    {
+      "name": "ruby-base64",
+      "repo": "extra",
+      "version": "0.1.1-4.0",
+      "filename": "ruby-base64-0.1.1-4.0-any.pkg.tar.zst",
+      "sha256": "02d581eeca3863a4ac7f8c2138e192659f3255952082cf13a6f0d6b4a591af9d",
+      "installedSize": 12697
+    },
+    {
+      "name": "ruby-benchmark",
+      "repo": "extra",
+      "version": "0.2.0-4.0",
+      "filename": "ruby-benchmark-0.2.0-4.0-any.pkg.tar.zst",
+      "sha256": "4e07bdbda1a3f976a98f3865993d7d6b00fe2aa91ec94463076707960a1d9e97",
+      "installedSize": 54263
+    },
+    {
+      "name": "ruby-bigdecimal",
+      "repo": "extra",
+      "version": "3.3.1-1.0",
+      "filename": "ruby-bigdecimal-3.3.1-1.0-any.pkg.tar.zst",
+      "sha256": "3c4b18fb533a4cd7dde3a0ef81228daf36a8054f66a0101dd2601259a7ec146e",
+      "installedSize": 252574
+    },
+    {
+      "name": "ruby-bundledgems",
+      "repo": "extra",
+      "version": "3.0.6-1.2",
+      "filename": "ruby-bundledgems-3.0.6-1.2-i686.pkg.tar.zst",
+      "sha256": "70e5d055a7df0b3539519ca8e2593b7f55c0ce1b7c58e8619eb8eaee296bc994",
+      "installedSize": 0
+    },
+    {
+      "name": "ruby-bundler",
+      "repo": "extra",
+      "version": "2.3.25-1.0",
+      "filename": "ruby-bundler-2.3.25-1.0-any.pkg.tar.zst",
+      "sha256": "14d2dac95a24c7dd5b02546ae7427480b6965d30e6176c04254b9f6b2671259a",
+      "installedSize": 1553377
+    },
+    {
+      "name": "ruby-cgi",
+      "repo": "extra",
+      "version": "0.3.6-1.0",
+      "filename": "ruby-cgi-0.3.6-1.0-i686.pkg.tar.zst",
+      "sha256": "fc7b88124d9fb928717de05f26939134dd44671af925f6322884f4358025294a",
+      "installedSize": 260134
+    },
+    {
+      "name": "ruby-csv",
+      "repo": "extra",
+      "version": "3.3.5-1.0",
+      "filename": "ruby-csv-3.3.5-1.0-any.pkg.tar.zst",
+      "sha256": "9d2d4e36855c4a0b24fbe69b4b8077038ec8e983dfe92c59e128bbe7e8e3fba3",
+      "installedSize": 667834
+    },
+    {
+      "name": "ruby-date",
+      "repo": "extra",
+      "version": "3.2.2-4.0",
+      "filename": "ruby-date-3.2.2-4.0-i686.pkg.tar.zst",
+      "sha256": "5e4a6f894f8a3579841c53b4d149fc415e57c0dbe03bbcd30cbf9b9bdd6dae46",
+      "installedSize": 389085
+    },
+    {
+      "name": "ruby-delegate",
+      "repo": "extra",
+      "version": "0.2.0-3.7",
+      "filename": "ruby-delegate-0.2.0-3.7-any.pkg.tar.zst",
+      "sha256": "ccdf5cd22e8d6e043d395acfff9717763cef08228c6f7df45546894b6a947baa",
+      "installedSize": 31502
+    },
+    {
+      "name": "ruby-did_you_mean",
+      "repo": "extra",
+      "version": "1.6.1-3.7",
+      "filename": "ruby-did_you_mean-1.6.1-3.7-any.pkg.tar.zst",
+      "sha256": "8bf5f544e720f18e35c9a10b058605916e4f6ce5d36defc83db0c4ed69988074",
+      "installedSize": 98944
+    },
+    {
+      "name": "ruby-digest",
+      "repo": "extra",
+      "version": "3.1.0-5.8",
+      "filename": "ruby-digest-3.1.0-5.8-i686.pkg.tar.zst",
+      "sha256": "f46acc03232c932c857c76e9f03f4f2f38900a647fa6b7a2388997e1a184e325",
+      "installedSize": 151164
+    },
+    {
+      "name": "ruby-drb",
+      "repo": "extra",
+      "version": "2.2.3-1.0",
+      "filename": "ruby-drb-2.2.3-1.0-any.pkg.tar.zst",
+      "sha256": "b05f25a77075948058119effa103643cff9642679fa2f0b6d48c16865ae3fd90",
+      "installedSize": 190511
+    },
+    {
+      "name": "ruby-english",
+      "repo": "extra",
+      "version": "0.7.1-3.8",
+      "filename": "ruby-english-0.7.1-3.8-any.pkg.tar.zst",
+      "sha256": "bd063ea4c5af08d4660da97152cd4a89f73ea5fe1ef71508758476d91bb97a4b",
+      "installedSize": 12741
+    },
+    {
+      "name": "ruby-erb",
+      "repo": "extra",
+      "version": "2.2.3-4.7",
+      "filename": "ruby-erb-2.2.3-4.7-any.pkg.tar.zst",
+      "sha256": "75c5136dd17e66e9631e61b0e79b3c04f192bb0a9014e2c49b0973ec27b1953a",
+      "installedSize": 67435
+    },
+    {
+      "name": "ruby-etc",
+      "repo": "extra",
+      "version": "1.3.0-5.7",
+      "filename": "ruby-etc-1.3.0-5.7-i686.pkg.tar.zst",
+      "sha256": "5f0917502fd13decc0c420ce08e2bad051aca6431ffb9bb53d33289658329e53",
+      "installedSize": 59024
+    },
+    {
+      "name": "ruby-fcntl",
+      "repo": "extra",
+      "version": "1.0.1-3.7",
+      "filename": "ruby-fcntl-1.0.1-3.7-i686.pkg.tar.zst",
+      "sha256": "c80ab9a01e8375a475f3d1b18038b004d0f848d89bbacfc9094d25cdaa0138cb",
+      "installedSize": 23625
+    },
+    {
+      "name": "ruby-fiddle",
+      "repo": "extra",
+      "version": "1.1.0-3.7",
+      "filename": "ruby-fiddle-1.1.0-3.7-i686.pkg.tar.zst",
+      "sha256": "e00c331481d18f4cb290eb6aeb5b5210fb25755e2fddfebcea42e62bb28e4f50",
+      "installedSize": 202155
+    },
+    {
+      "name": "ruby-fileutils",
+      "repo": "extra",
+      "version": "1.6.0-3.8",
+      "filename": "ruby-fileutils-1.6.0-3.8-any.pkg.tar.zst",
+      "sha256": "c853a0360b25bb748d308d3fc660d41ed11d2513c2e6bf17579fbc47065bf0bb",
+      "installedSize": 128354
+    },
+    {
+      "name": "ruby-find",
+      "repo": "extra",
+      "version": "0.1.1-3.8",
+      "filename": "ruby-find-0.1.1-3.8-any.pkg.tar.zst",
+      "sha256": "1da808489dbfb41fa7997c3ab56bb2e12ca99cfe38ce1a26b8fc10e639fc8ac2",
+      "installedSize": 9997
+    },
+    {
+      "name": "ruby-forwardable",
+      "repo": "extra",
+      "version": "1.3.2-5.8",
+      "filename": "ruby-forwardable-1.3.2-5.8-any.pkg.tar.zst",
+      "sha256": "17149c32a61c1b1c62874302c84126ce1929a64920676a555f0331f84a5a0a88",
+      "installedSize": 27011
+    },
+    {
+      "name": "ruby-getoptlong",
+      "repo": "extra",
+      "version": "0.1.1-2.8",
+      "filename": "ruby-getoptlong-0.1.1-2.8-any.pkg.tar.zst",
+      "sha256": "9af33a6e0aa8d380ae67b95d41e1d288415ba18c9102bfbf53b7f60d5de1df34",
+      "installedSize": 35679
+    },
+    {
+      "name": "ruby-io-console",
+      "repo": "extra",
+      "version": "0.5.11-2.7",
+      "filename": "ruby-io-console-0.5.11-2.7-i686.pkg.tar.zst",
+      "sha256": "d5da2b531eb3deb33a333f40358a959d48045af10f6326dacbc17f26ca9dffc6",
+      "installedSize": 51245
+    },
+    {
+      "name": "ruby-io-nonblock",
+      "repo": "extra",
+      "version": "0.1.0-2.6",
+      "filename": "ruby-io-nonblock-0.1.0-2.6-any.pkg.tar.zst",
+      "sha256": "1aee03dbb731d2ae975ae42f737c305d1aff6617ef5d098a603056e6ca13b280",
+      "installedSize": 18036
+    },
+    {
+      "name": "ruby-io-wait",
+      "repo": "extra",
+      "version": "0.2.3-3.7",
+      "filename": "ruby-io-wait-0.2.3-3.7-i686.pkg.tar.zst",
+      "sha256": "f65732864af56a6a04b811fdafda2545152864b949d8a41ba14ba2f4ef91e7d2",
+      "installedSize": 22480
+    },
+    {
+      "name": "ruby-ipaddr",
+      "repo": "extra",
+      "version": "1.2.4-2.8",
+      "filename": "ruby-ipaddr-1.2.4-2.8-any.pkg.tar.zst",
+      "sha256": "ff8856b75cf7261be27be2175403aa1b671d6fc9943161e455d34fea1f106ba0",
+      "installedSize": 53391
+    },
+    {
+      "name": "ruby-irb",
+      "repo": "extra",
+      "version": "1.4.2-1.4",
+      "filename": "ruby-irb-1.4.2-1.4-any.pkg.tar.zst",
+      "sha256": "d5ee3f07934f131d58c61a6b585645a3ebd0b46b5d02b453646f8497ae90fde1",
+      "installedSize": 432491
+    },
+    {
+      "name": "ruby-json",
+      "repo": "extra",
+      "version": "2.7.1-1.0",
+      "filename": "ruby-json-2.7.1-1.0-i686.pkg.tar.zst",
+      "sha256": "2a61ccd6cdcc0e348e9c86a197d53951354c095e66fb696e981b8a762ceccd24",
+      "installedSize": 449594
+    },
+    {
+      "name": "ruby-logger",
+      "repo": "extra",
+      "version": "1.5.1-2.8",
+      "filename": "ruby-logger-1.5.1-2.8-any.pkg.tar.zst",
+      "sha256": "3b6bfd6be2c6e43b3b66ad63f8e8932cb3db55e96129af3f24859309c63ab173",
+      "installedSize": 69093
+    },
+    {
+      "name": "ruby-manpages",
+      "repo": "extra",
+      "version": "0.6.1-4.1",
+      "filename": "ruby-manpages-0.6.1-4.1-any.pkg.tar.zst",
+      "sha256": "8af49b4c996f0da18f7b6780bf0637605a81a07d0b6339ab94ff67f5c6668f12",
+      "installedSize": 55444
+    },
+    {
+      "name": "ruby-minitest",
+      "repo": "extra",
+      "version": "5.27.0-1.0",
+      "filename": "ruby-minitest-5.27.0-1.0-any.pkg.tar.zst",
+      "sha256": "22550e6d7abe605576ef9881c08ccf19ec5212fb0125850bf29f79c36b6be07b",
+      "installedSize": 746279
+    },
+    {
+      "name": "ruby-mutex_m",
+      "repo": "extra",
+      "version": "0.1.1-2.8",
+      "filename": "ruby-mutex_m-0.1.1-2.8-any.pkg.tar.zst",
+      "sha256": "96c1fde0a010dae8627c64f70626acbd84371b7391153b2b712229bb132b4362",
+      "installedSize": 9919
+    },
+    {
+      "name": "ruby-net-http",
+      "repo": "extra",
+      "version": "0.2.2-2.8",
+      "filename": "ruby-net-http-0.2.2-2.8-any.pkg.tar.zst",
+      "sha256": "7c10c5972c2808def14e3131f8ab7b2b19eee24327fd2ab191d51633ad0c7e7f",
+      "installedSize": 304731
+    },
+    {
+      "name": "ruby-open-uri",
+      "repo": "extra",
+      "version": "0.2.0-3.6",
+      "filename": "ruby-open-uri-0.2.0-3.6-any.pkg.tar.zst",
+      "sha256": "e32bb479f9b5db78d9e54be61f8e60937908cbb2fb17b0b04167fb40e8fc0b79",
+      "installedSize": 49443
+    },
+    {
+      "name": "ruby-optimist",
+      "repo": "extra",
+      "version": "3.2.1-1.0",
+      "filename": "ruby-optimist-3.2.1-1.0-any.pkg.tar.zst",
+      "sha256": "96848980b5abd9102266ec6fb74bd6976059a9975874e2bdc88713bd73e27689",
+      "installedSize": 154720
+    },
+    {
+      "name": "ruby-paint",
+      "repo": "extra",
+      "version": "2.3.0-2.0",
+      "filename": "ruby-paint-2.3.0-2.0-any.pkg.tar.zst",
+      "sha256": "680e2e8c01dfa90b7320793cb67e56193f0de847adfb1982ebab6390cd949c46",
+      "installedSize": 73958
+    },
+    {
+      "name": "ruby-power_assert",
+      "repo": "extra",
+      "version": "2.0.5-4.0",
+      "filename": "ruby-power_assert-2.0.5-4.0-any.pkg.tar.zst",
+      "sha256": "4e18670e91e7bd56b10e6d69f51e136f00dd67d1413ad12551a422153c5e0626",
+      "installedSize": 96947
+    },
+    {
+      "name": "ruby-psych",
+      "repo": "extra",
+      "version": "4.0.6-1.6",
+      "filename": "ruby-psych-4.0.6-1.6-i686.pkg.tar.zst",
+      "sha256": "68aae4de6ac378ac0e7e1ee2e9edeacd0be5fd7f5a4dd59b33958604414c8baf",
+      "installedSize": 309970
+    },
+    {
+      "name": "ruby-racc",
+      "repo": "extra",
+      "version": "1.6.0-3.7",
+      "filename": "ruby-racc-1.6.0-3.7-i686.pkg.tar.zst",
+      "sha256": "219e3c31dc5b17f4eca792c5dafff3bf16afd2ace6757fe25bb102eb6496514e",
+      "installedSize": 360613
+    },
+    {
+      "name": "ruby-rake",
+      "repo": "extra",
+      "version": "13.4.2-1.0",
+      "filename": "ruby-rake-13.4.2-1.0-any.pkg.tar.zst",
+      "sha256": "ef11d39a7661b468c77d26df429c27e97c6d16a562c38e10e4c8b743062e2824",
+      "installedSize": 507347
+    },
+    {
+      "name": "ruby-rdoc",
+      "repo": "extra",
+      "version": "6.4.0-4.5",
+      "filename": "ruby-rdoc-6.4.0-4.5-any.pkg.tar.zst",
+      "sha256": "7caebac5a8d6b2171d0acf40010f810aaab2b63f9d4f4e12fae7df955a110774",
+      "installedSize": 3003591
+    },
+    {
+      "name": "ruby-reline",
+      "repo": "extra",
+      "version": "0.3.1-2.7",
+      "filename": "ruby-reline-0.3.1-2.7-any.pkg.tar.zst",
+      "sha256": "3567a911d1c8c300bf8f804e2fea49ee16e0405bc91d550c4b0ec34f97d73d44",
+      "installedSize": 432522
+    },
+    {
+      "name": "ruby-rexml",
+      "repo": "extra",
+      "version": "3.4.4-1.0",
+      "filename": "ruby-rexml-3.4.4-1.0-any.pkg.tar.zst",
+      "sha256": "8c2943a8002bc23ab2f35863bc3bb606c43e3e73b51f0af6300857e97a768ec8",
+      "installedSize": 1093612
+    },
+    {
+      "name": "ruby-ruby2_keywords",
+      "repo": "extra",
+      "version": "0.0.5-1.0",
+      "filename": "ruby-ruby2_keywords-0.0.5-1.0-any.pkg.tar.zst",
+      "sha256": "337cbe2dc615e909f704bff3de7ed9b422ae2b74aae9061fa55a3564bb7b5a17",
+      "installedSize": 14682
+    },
+    {
+      "name": "ruby-stdlib",
+      "repo": "extra",
+      "version": "3.0.4-20.0",
+      "filename": "ruby-stdlib-3.0.4-20.0-i686.pkg.tar.zst",
+      "sha256": "878c624f92603945ca574d6ae3f015cfab7979a27bb44d6a04bd8ce6f71b6d5d",
+      "installedSize": 0
+    },
+    {
+      "name": "ruby-stringio",
+      "repo": "extra",
+      "version": "3.0.2-4.9",
+      "filename": "ruby-stringio-3.0.2-4.9-i686.pkg.tar.zst",
+      "sha256": "fa7c011720e659cf688037a7aab0261af01e4fd571944c2d3eedd0b99ced5ba4",
+      "installedSize": 78805
+    },
+    {
+      "name": "ruby-test-unit",
+      "repo": "extra",
+      "version": "3.7.8-1.0",
+      "filename": "ruby-test-unit-3.7.8-1.0-any.pkg.tar.zst",
+      "sha256": "b2fe3f1b656e52b3678ab8212d9a2d9b8d862e6351b38ccd7a29bade80650af2",
+      "installedSize": 540662
+    },
+    {
+      "name": "ruby-time",
+      "repo": "extra",
+      "version": "0.2.0-4.6",
+      "filename": "ruby-time-0.2.0-4.6-any.pkg.tar.zst",
+      "sha256": "cf79829bc53e342cba7c7ff55e9d6c9431ad965b5358c517589a01b5d1505c0e",
+      "installedSize": 45921
+    },
+    {
+      "name": "ruby-tmpdir",
+      "repo": "extra",
+      "version": "0.1.2-3.7",
+      "filename": "ruby-tmpdir-0.1.2-3.7-any.pkg.tar.zst",
+      "sha256": "60d41f20d6ba6c6d48c4afb2eb29562881d0ceacdf87dec86847c0a2708e69b6",
+      "installedSize": 13612
+    },
+    {
+      "name": "ruby-uri",
+      "repo": "extra",
+      "version": "0.11.0-5.7",
+      "filename": "ruby-uri-0.11.0-5.7-any.pkg.tar.zst",
+      "sha256": "51009bfc9fee2764a14453248d151657bba9555f09c6acb1caef12d484b0be7f",
+      "installedSize": 243318
+    },
+    {
+      "name": "rubygems",
+      "repo": "extra",
+      "version": "3.3.25-1.0",
+      "filename": "rubygems-3.3.25-1.0-any.pkg.tar.zst",
+      "sha256": "6c09304db9ccf4527f6616c2d3e383b06baff5a87fa0c1d927b12de5696e183a",
+      "installedSize": 2254504
+    },
+    {
+      "name": "screenfetch",
+      "repo": "extra",
+      "version": "3.9.9-1.0",
+      "filename": "screenfetch-3.9.9-1.0-any.pkg.tar.zst",
+      "sha256": "7310989be4e45689f12884fe8ed30cf744ae1856341f210f42b895a11bd1150b",
+      "installedSize": 261381
+    },
+    {
+      "name": "sed",
+      "repo": "core",
+      "version": "4.10-2.0",
+      "filename": "sed-4.10-2.0-i686.pkg.tar.zst",
+      "sha256": "0ad25ab39a9a181fb77b79dfd7948dfad33dcd53c1deb7b90c8950e933cbc68e",
+      "installedSize": 740647
+    },
+    {
+      "name": "shadow",
+      "repo": "core",
+      "version": "4.18.0-1.3",
+      "filename": "shadow-4.18.0-1.3-i686.pkg.tar.zst",
+      "sha256": "42af552e6921f07d74bd3eb006d08fded56e943f364a438dd2a1d68622df00bc",
+      "installedSize": 3327855
+    },
+    {
+      "name": "sl",
+      "repo": "extra",
+      "version": "5.05-6.0",
+      "filename": "sl-5.05-6.0-i686.pkg.tar.zst",
+      "sha256": "93e2058d94193f422d7fac62a51dddd4151904d07f53f294db60f7e812358f8b",
+      "installedSize": 22865
+    },
+    {
+      "name": "sqlite",
+      "repo": "core",
+      "version": "3.53.0-2.0",
+      "filename": "sqlite-3.53.0-2.0-i686.pkg.tar.zst",
+      "sha256": "2230e1ad25817fe02c153653d4dc7295ec5a0f7a76e444db112f7694d9b36398",
+      "installedSize": 18283339
+    },
+    {
+      "name": "systemd",
+      "repo": "core",
+      "version": "259.5-1.0",
+      "filename": "systemd-259.5-1.0-i686.pkg.tar.zst",
+      "sha256": "539ad25b9a576cd109fdd7ae8bde3c16e3e504eb05b257c62ab09f48b1dbb5d4",
+      "installedSize": 36071657
+    },
+    {
+      "name": "systemd-libs",
+      "repo": "core",
+      "version": "259.5-1.0",
+      "filename": "systemd-libs-259.5-1.0-i686.pkg.tar.zst",
+      "sha256": "40b326ac59554ae195ba9a433418147cf1906c2e64284ef625c5edb7379b82e0",
+      "installedSize": 3276200
+    },
+    {
+      "name": "systemd-sysvcompat",
+      "repo": "core",
+      "version": "259.5-1.0",
+      "filename": "systemd-sysvcompat-259.5-1.0-i686.pkg.tar.zst",
+      "sha256": "bb0f710a8db35974db6bb969d125ae57c5254e7e9fe4e9bdffd6cd111746b220",
+      "installedSize": 2707
+    },
+    {
+      "name": "tar",
+      "repo": "core",
+      "version": "1.35-5.0",
+      "filename": "tar-1.35-5.0-i686.pkg.tar.zst",
+      "sha256": "f9ea19070234b5a4aa3c30c745c51c8ceda10f8859b9cc228d2cd0826aeeaf9f",
+      "installedSize": 2925089
+    },
+    {
+      "name": "tmux",
+      "repo": "extra",
+      "version": "3.3_a-7.0",
+      "filename": "tmux-3.3_a-7.0-i686.pkg.tar.zst",
+      "sha256": "2e695ccc6ac15d4395fc6e3c8d5be8743acf5562e7e9f0b33c361f5abfa268ed",
+      "installedSize": 1093643
+    },
+    {
+      "name": "tpm2-tss",
+      "repo": "core",
+      "version": "3.2.0-3.1",
+      "filename": "tpm2-tss-3.2.0-3.1-i686.pkg.tar.zst",
+      "sha256": "1583422bb4f9fab49161e3ab1f8bf094d17c61571867abe1569b3655f8c8c8fc",
+      "installedSize": 3057461
+    },
+    {
+      "name": "tree",
+      "repo": "extra",
+      "version": "2.3.2-1.0",
+      "filename": "tree-2.3.2-1.0-i686.pkg.tar.zst",
+      "sha256": "5c4d56202e9c10b442cbc6a939d43293f63dd33851945077ad50654fcaccaa5b",
+      "installedSize": 86864
+    },
+    {
+      "name": "tzdata",
+      "repo": "core",
+      "version": "2026c-1.0",
+      "filename": "tzdata-2026c-1.0-i686.pkg.tar.zst",
+      "sha256": "f94ff493a1012406ffdcd80277b7fede6334a42862632aad78f93c9c94db2e13",
+      "installedSize": 1728159
+    },
+    {
+      "name": "util-linux",
+      "repo": "core",
+      "version": "2.41.3-2.3",
+      "filename": "util-linux-2.41.3-2.3-i686.pkg.tar.zst",
+      "sha256": "194dd93b9d4461b994e818189809bc7a3b1c3c0c9f5734e65164f59b571afba0",
+      "installedSize": 18256161
+    },
+    {
+      "name": "util-linux-libs",
+      "repo": "core",
+      "version": "2.41.3-2.3",
+      "filename": "util-linux-libs-2.41.3-2.3-i686.pkg.tar.zst",
+      "sha256": "86f568813a382757786a51aeb37baa25790c87d1031701ece07f7379c53f7eaa",
+      "installedSize": 1373764
+    },
+    {
+      "name": "vim",
+      "repo": "extra",
+      "version": "9.1.1337-1.0",
+      "filename": "vim-9.1.1337-1.0-i686.pkg.tar.zst",
+      "sha256": "ca00a5df5f12a36a8a642d85041369fac3e5b1e0774b4a91645745d4731dcad2",
+      "installedSize": 5174373
+    },
+    {
+      "name": "vim-runtime",
+      "repo": "extra",
+      "version": "9.1.1337-1.0",
+      "filename": "vim-runtime-9.1.1337-1.0-i686.pkg.tar.zst",
+      "sha256": "0492cc7352e0dde1592457ae6b8129e03a9b00f02e5c01c0311c5a251fb81576",
+      "installedSize": 39704086
+    },
+    {
+      "name": "w3m",
+      "repo": "extra",
+      "version": "0.5.3.git20230713_1-1.0",
+      "filename": "w3m-0.5.3.git20230713_1-1.0-i686.pkg.tar.zst",
+      "sha256": "2f54fea76f4b708a7749b38d3f05e23b3309caa385a423611d9de79a3cc0c0e3",
+      "installedSize": 2007554
+    },
+    {
+      "name": "which",
+      "repo": "core",
+      "version": "2.25-1.0",
+      "filename": "which-2.25-1.0-i686.pkg.tar.zst",
+      "sha256": "ca456224f39197c2d6194eeb295d48743698b3a3cbc0edf03c223b00c14385f7",
+      "installedSize": 26226
+    },
+    {
+      "name": "xz",
+      "repo": "core",
+      "version": "5.8.3-1.0",
+      "filename": "xz-5.8.3-1.0-i686.pkg.tar.zst",
+      "sha256": "9911ef733a2fe3a12a169c5d0a2ec836cdc2cda0f0dcf7be4f6e47fcf167fea2",
+      "installedSize": 3124208
+    },
+    {
+      "name": "yyjson",
+      "repo": "extra",
+      "version": "0.12.0-1.0",
+      "filename": "yyjson-0.12.0-1.0-i686.pkg.tar.zst",
+      "sha256": "7a4130b7f92f089025760ab3fd366c0a02c17230ffdb72e7342b0e6a8c831730",
+      "installedSize": 750165
+    },
+    {
+      "name": "zlib",
+      "repo": "core",
+      "version": "1:1.3.2-3.0",
+      "filename": "zlib-1:1.3.2-3.0-i686.pkg.tar.zst",
+      "sha256": "ddec6878082a45ecf5f88f43e961d73089c8ae525a1aa5612b1c90b89daa62a2",
+      "installedSize": 215640
+    },
+    {
+      "name": "zsh",
+      "repo": "extra",
+      "version": "5.9-6.0",
+      "filename": "zsh-5.9-6.0-i686.pkg.tar.zst",
+      "sha256": "6040ab923d924d5eacf0310cd721de8283deb88e3de7fd6a1b15d079f702b10b",
+      "installedSize": 6727973
+    },
+    {
+      "name": "zstd",
+      "repo": "core",
+      "version": "1.5.7-3.0",
+      "filename": "zstd-1.5.7-3.0-i686.pkg.tar.zst",
+      "sha256": "0047023c1275a2539631b57255db5f10d53236a3e9ce18a7d6fc3876d89a7d3c",
+      "installedSize": 1578233
+    }
+  ]
+}

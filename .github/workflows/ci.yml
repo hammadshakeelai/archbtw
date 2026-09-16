@@ -1,0 +1,52 @@
+name: CI
+
+on:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  validate:
+    name: Typecheck, test and build
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    env:
+      BASE_PATH: /${{ github.event.repository.name }}/
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: npm
+
+      - run: npm ci
+      - run: npm run typecheck
+      - run: npm test
+      - run: bash -n scripts/rootfs.sh
+
+      # The manifest must still resolve against the live archlinux32 repos.
+      - run: npm run resolve
+
+      - uses: actions/cache@v6
+        if: hashFiles('images.lock.json') != ''
+        with:
+          path: public/images
+          key: guest-${{ hashFiles('images.lock.json') }}
+
+      - if: hashFiles('images.lock.json') != ''
+        run: npm run images
+
+      - run: npm run build
+
+      - if: hashFiles('images.lock.json') != ''
+        run: npx playwright install --with-deps chromium
+
+      - if: hashFiles('images.lock.json') != ''
+        run: npm run test:e2e

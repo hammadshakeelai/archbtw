@@ -1,0 +1,18 @@
+
+       /\          archbtw -- a real Arch Linux, running in your browser
+      /  \         i686 kernel, systemd, bash and pacman. None of it is faked:
+     /\   \        this is an emulated PC booting archlinux32.
+    /      \
+   /   ,,   \      Things to try:
+  /   |  |  -\       sl                   cmatrix              nyancat
+ /_-''    ''-_\      asciiquarium         pipes                fastfetch
+                     fortune | cowsay     figlet btw | lolcat  neofetch
+                     snake                worm                 robots
+                     hangman              atc                  adventure
+                     htop                 vim                  tmux
+                     pacman -Q | wc -l    pacman -Qi bash      cowsay -f tux hi
+
+  There is no network in here, so pacman -S can't reach a mirror -- but
+  everything above is already installed. Ctrl+C stops a toy. Reload the
+  page for a brand-new machine.
+

@@ -1,0 +1,11 @@
+#!/bin/bash
+
+build() {
+    add_runscript
+}
+
+help() {
+    cat <<HELPEOF
+Mounts the root filesystem from v86's 9p share (host9p) instead of a disk.
+HELPEOF
+}

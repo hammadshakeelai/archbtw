@@ -1,0 +1,10 @@
+node_modules
+dist
+.astro
+build/
+public/images/
+test-results
+playwright-report
+*.log
+.DS_Store
+.remember/

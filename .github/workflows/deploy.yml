@@ -1,0 +1,90 @@
+name: Deploy
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    name: Test and deploy
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    env:
+      BASE_PATH: /${{ github.event.repository.name }}/
+    steps:
+      - uses: actions/checkout@v7
+
+      # Until the 'Build guest' workflow has run once there is nothing to serve.
+      - name: Check for a built guest
+        id: guest
+        run: |
+          if [ -f images.lock.json ]; then
+            echo "ready=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "::notice::No guest yet. Run the 'Build guest' workflow; it deploys when it finishes."
+            echo "ready=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - uses: actions/setup-node@v7
+        if: steps.guest.outputs.ready == 'true'
+        with:
+          node-version: 24
+          cache: npm
+
+      - if: steps.guest.outputs.ready == 'true'
+        run: npm ci
+
+      - uses: actions/cache@v6
+        if: steps.guest.outputs.ready == 'true'
+        with:
+          path: public/images
+          key: guest-${{ hashFiles('images.lock.json') }}
+
+      - if: steps.guest.outputs.ready == 'true'
+        run: npm run images
+
+      - if: steps.guest.outputs.ready == 'true'
+        run: npm test
+
+      - if: steps.guest.outputs.ready == 'true'
+        run: npm run build
+
+      # Boot the real page against the real guest before shipping it.
+      - if: steps.guest.outputs.ready == 'true'
+        run: npx playwright install --with-deps chromium
+
+      - if: steps.guest.outputs.ready == 'true'
+        run: npm run test:e2e
+
+      - name: Check the site fits GitHub Pages
+        if: steps.guest.outputs.ready == 'true'
+        run: |
+          size_mb=$(du -sm dist | cut -f1)
+          echo "dist is ${size_mb} MB"
+          [ "$size_mb" -le 1000 ] || { echo "::error::dist is ${size_mb} MB; GitHub Pages allows 1 GB"; exit 1; }
+
+      - uses: actions/configure-pages@v6
+        if: steps.guest.outputs.ready == 'true'
+
+      - uses: actions/upload-pages-artifact@v5
+        if: steps.guest.outputs.ready == 'true'
+        with:
+          path: dist
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        if: steps.guest.outputs.ready == 'true'
+        uses: actions/deploy-pages@v5

@@ -1,0 +1,115 @@
+name: Build guest
+
+# Builds the Arch Linux guest, boots it once to take the snapshot, publishes
+# both as a release, points images.lock.json at it and redeploys the site.
+# Slow (tens of minutes), so it runs only when asked.
+
+on:
+  workflow_dispatch:
+    inputs:
+      debug:
+        description: Send the whole boot log to the serial port
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+  actions: write
+
+concurrency:
+  group: guest
+  cancel-in-progress: false
+
+jobs:
+  build:
+    name: Build, snapshot and release
+    runs-on: ubuntu-24.04
+    timeout-minutes: 150
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: npm
+
+      - run: npm ci
+
+      # archlinux32 is rolling and mirrors drop superseded package files, so
+      # resolve against the repos as they are today rather than a stale lock.
+      - name: Resolve packages
+        run: npm run resolve
+
+      - uses: actions/cache@v6
+        with:
+          path: build/cache
+          key: packages-${{ hashFiles('scripts/packages.lock.json') }}
+          restore-keys: packages-
+
+      - name: Build the root filesystem
+        run: sudo bash scripts/rootfs.sh
+
+      - name: Boot it and save the snapshot
+        env:
+          ARCHBTW_DEBUG: ${{ inputs.debug && '1' || '0' }}
+        run: |
+          sudo chown -R "$(id -u):$(id -g)" build
+          node scripts/snapshot.ts build/out
+
+      - name: Package the images
+        id: package
+        run: |
+          tag="guest-$(date -u +%Y%m%d)-${GITHUB_RUN_NUMBER}"
+          tar -cf build/archbtw-images.tar -C build/out arch arch_state.bin.zst
+          {
+            echo "tag=$tag"
+            echo "sha256=$(sha256sum build/archbtw-images.tar | cut -d' ' -f1)"
+            echo "bytes=$(stat -c %s build/archbtw-images.tar)"
+          } >> "$GITHUB_OUTPUT"
+          du -sh build/archbtw-images.tar
+
+      - name: Publish the release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ steps.package.outputs.tag }}
+        run: |
+          {
+            echo "The archbtw guest: an archlinux32 i686 root filesystem in v86's 9p format, and a snapshot of it booted to a shell."
+            echo
+            echo '```'
+            cat build/out/rootfs-report.txt
+            echo
+            cat build/out/snapshot-report.json
+            echo '```'
+          } > build/release-notes.md
+          gh release create "$TAG" \
+            build/archbtw-images.tar build/out/rootfs-report.txt build/out/snapshot-report.json \
+            --title "Guest $TAG" --notes-file build/release-notes.md
+
+      - name: Point the site at the new guest
+        env:
+          TAG: ${{ steps.package.outputs.tag }}
+          SHA256: ${{ steps.package.outputs.sha256 }}
+          BYTES: ${{ steps.package.outputs.bytes }}
+        run: |
+          cat > images.lock.json <<EOF
+          {
+            "tag": "$TAG",
+            "asset": "archbtw-images.tar",
+            "url": "https://github.com/${GITHUB_REPOSITORY}/releases/download/$TAG/archbtw-images.tar",
+            "sha256": "$SHA256",
+            "bytes": $BYTES
+          }
+          EOF
+          git config user.name "github-actions[bot]"
+          git config user.email "41898283+github-actions[bot]@users.noreply.github.com"
+          git add images.lock.json scripts/packages.lock.json
+          git commit -m "Use guest $TAG"
+          git push
+
+      # A push made with GITHUB_TOKEN doesn't trigger other workflows, so
+      # start the deploy explicitly.
+      - name: Deploy the site
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh workflow run deploy.yml --ref "${GITHUB_REF_NAME}"
