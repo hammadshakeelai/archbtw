@@ -6,8 +6,13 @@ import { PROMPT } from "../src/lib/guest.ts";
  * v86's screen events. A page that merely renders would pass a DOM check with a
  * broken image, so every test waits for output only a working Linux produces.
  *
- * Commands print markers built by the shell (`btw$((6*7))` -> `btw42`) so a
- * match can't come from text already on screen, such as the MOTD.
+ * Commands print markers the shell builds (`\x62tw\x34\x32` -> `btw42`), so a
+ * match can't come from text already on screen, such as the MOTD or the
+ * command line itself.
+ *
+ * Playwright's keyboard.type() presses "$" as the 4 key without holding
+ * Shift, and v86 translates keys by key code, so desktop typing here sticks
+ * to unshifted keys. A real keyboard sends its Shift key and is unaffected.
  */
 
 async function screen(page: Page): Promise<string> {
@@ -30,15 +35,16 @@ test("runs real commands typed on a keyboard", async ({ page }) => {
   await waitForPrompt(page);
   await page.locator("#stage").click();
 
-  await page.keyboard.type("echo btw$((6*7))\n", { delay: 40 });
+  await page.keyboard.type("echo -e \\\\x62tw\\\\x34\\\\x32\n", { delay: 40 });
   await expect.poll(() => screen(page), { timeout: 60_000 }).toContain("btw42");
 
   // cowsay is a Perl script: this reads perl and the cow file over 9p.
   await page.keyboard.type("cowsay moo\n", { delay: 40 });
   await expect.poll(() => screen(page), { timeout: 180_000, intervals: [2_000] }).toContain("< moo >");
 
-  await page.keyboard.type("echo pkgs=$(pacman -Q | wc -l)\n", { delay: 40 });
-  await expect.poll(() => screen(page), { timeout: 120_000, intervals: [2_000] }).toMatch(/pkgs=2\d\d/);
+  // pacman reads its local database, offline.
+  await page.keyboard.type("pacman --query --info sl\n", { delay: 40 });
+  await expect.poll(() => screen(page), { timeout: 120_000, intervals: [2_000] }).toContain("Installed Size");
 });
 
 test("shows which files the guest reads", async ({ page }) => {
@@ -62,7 +68,9 @@ test.describe("on a phone", () => {
     await page.locator("#stage").tap();
     const keyboard = page.locator("#phone-keyboard");
 
-    // Tab completes "ech" to "echo " in the guest's bash.
+    // Tab completes "ech" to "echo " in the guest's bash. The "$", "(" and "+"
+    // that follow need Shift, which a phone keyboard doesn't report; they
+    // must still arrive intact.
     await keyboard.pressSequentially("ech", { delay: 60 });
     await page.getByRole("button", { name: "Tab", exact: true }).tap();
     await keyboard.pressSequentially("tab$((40+2))", { delay: 60 });

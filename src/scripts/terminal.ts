@@ -3,7 +3,7 @@ import { v86Options } from "../lib/config.ts";
 import { TextScreen } from "../lib/vga.ts";
 import { Machine, type Emulator, type MachineState } from "../emulator/machine.ts";
 import { createScreen, fitScreen, type ScreenElements } from "../emulator/screen.ts";
-import { chord, interpretInput, isUnidentified, tap, type Modifier, type SpecialKey } from "../input/keys.ts";
+import { chord, interpretInput, isUnidentified, sendsAsText, tap, type Modifier, type SpecialKey } from "../input/keys.ts";
 
 function element<T extends HTMLElement>(id: string): T {
   const found = document.getElementById(id);
@@ -212,6 +212,13 @@ keybar.addEventListener("click", (event) => {
 let unidentified = false;
 phoneKeyboard.addEventListener("keydown", (event) => {
   unidentified = isUnidentified(event);
+  if (sendsAsText(event)) {
+    // Stops v86's own listener typing the key without its Shift, and stops
+    // the input event that would otherwise follow.
+    event.preventDefault();
+    event.stopPropagation();
+    if (!sendWithModifier(event.key)) machine.sendText(event.key);
+  }
 });
 phoneKeyboard.addEventListener("input", (event) => {
   const input = event as InputEvent;

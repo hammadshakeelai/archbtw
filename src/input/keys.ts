@@ -82,3 +82,16 @@ export function interpretInput(inputType: string, data: string | null): SoftInpu
 export function isUnidentified(event: Pick<KeyboardEvent, "key" | "keyCode">): boolean {
   return event.keyCode === 229 || event.key === "Unidentified" || event.key === "Process";
 }
+
+/**
+ * Whether a phone keyboard's keydown should reach the guest as text.
+ *
+ * v86 translates keys by their key code, which loses Shift on phones: iOS
+ * reports "$" as the 4 key with no Shift held, so the guest would get "4".
+ * Sending the character as text lets v86 hold Shift itself. Keys that aren't
+ * one printable character (Enter, Backspace, arrows) and shortcuts still go
+ * through v86 as keys.
+ */
+export function sendsAsText(event: Pick<KeyboardEvent, "key" | "keyCode" | "ctrlKey" | "altKey" | "metaKey">): boolean {
+  return !isUnidentified(event) && event.key.length === 1 && !event.ctrlKey && !event.altKey && !event.metaKey;
+}

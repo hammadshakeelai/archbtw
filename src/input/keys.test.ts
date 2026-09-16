@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { chord, interpretInput, isUnidentified, tap } from "./keys.ts";
+import { chord, interpretInput, isUnidentified, sendsAsText, tap } from "./keys.ts";
 
 describe("tap", () => {
   it("presses and releases a plain key", () => {
@@ -49,5 +49,31 @@ describe("isUnidentified", () => {
 
   it("leaves real keydowns to v86", () => {
     expect(isUnidentified({ key: "a", keyCode: 65 })).toBe(false);
+  });
+});
+
+describe("sendsAsText", () => {
+  const key = (key: string, extra: Partial<KeyboardEvent> = {}) => ({
+    key,
+    keyCode: 0,
+    ctrlKey: false,
+    altKey: false,
+    metaKey: false,
+    ...extra,
+  });
+
+  it("sends shifted symbols as text so they keep their Shift", () => {
+    expect(sendsAsText(key("$", { keyCode: 52 }))).toBe(true);
+    expect(sendsAsText(key("|"))).toBe(true);
+  });
+
+  it("leaves named keys and shortcuts to v86", () => {
+    expect(sendsAsText(key("Enter"))).toBe(false);
+    expect(sendsAsText(key("Backspace"))).toBe(false);
+    expect(sendsAsText(key("c", { ctrlKey: true }))).toBe(false);
+  });
+
+  it("leaves unidentified keydowns to the input event", () => {
+    expect(sendsAsText(key("Unidentified", { keyCode: 229 }))).toBe(false);
   });
 });
