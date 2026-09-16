@@ -1,33 +1,53 @@
 /**
- * Read VGA text-mode memory as lines of text.
+ * The guest's text screen, rebuilt from v86's screen events.
  *
- * In text mode the screen lives at physical address 0xB8000 as (character,
- * attribute) byte pairs. The Linux console can scroll by moving the display
- * origin inside the 32 KB window rather than copying, so callers read the whole
- * window and look for what they need anywhere in it.
+ * v86's VGA text buffer is device memory, not guest RAM, so it can't be read
+ * with read_memory. Instead v86 announces every character it draws
+ * (`screen-put-char`) and every mode change (`screen-set-size`), and redraws
+ * the whole screen after restoring a snapshot, so listening from the start
+ * gives an exact copy. The snapshot builder and the page's tests both use it.
  */
 
-export const VGA_TEXT_BASE = 0xb8000;
-export const VGA_TEXT_WINDOW = 0x8000;
 export const COLUMNS = 80;
+export const ROWS = 25;
 
-/** Character bytes only, as rows of `columns`, trailing blanks trimmed. */
-export function textRows(memory: Uint8Array, columns = COLUMNS): string[] {
-  const rows: string[] = [];
-  const cells = Math.floor(memory.length / 2);
-  for (let start = 0; start < cells; start += columns) {
-    let row = "";
-    for (let cell = start; cell < Math.min(start + columns, cells); cell++) {
-      const code = memory[cell * 2];
-      // Code page 437 matches ASCII for printable bytes; show the rest as spaces.
-      row += code >= 0x20 && code < 0x7f ? String.fromCharCode(code) : " ";
-    }
-    rows.push(row.trimEnd());
+export class TextScreen {
+  private columns = COLUMNS;
+  private cells: number[] = new Array(COLUMNS * ROWS).fill(0x20);
+  /** True while the guest is in a graphics mode, when there is no text to read. */
+  graphical = false;
+
+  /** Payload of `screen-put-char`: [row, col, chr]. */
+  put([row, col, chr]: [number, number, number]): void {
+    if (col >= this.columns) return;
+    const index = row * this.columns + col;
+    if (index >= this.cells.length) return;
+    this.cells[index] = chr;
   }
-  return rows;
-}
 
-/** The rows that have anything on them, for a readable dump in a CI log. */
-export function nonBlankRows(memory: Uint8Array, columns = COLUMNS): string[] {
-  return textRows(memory, columns).filter((row) => row.length > 0);
+  /** Payload of `screen-set-size`: [cols, rows, bpp]; bpp is 0 in text mode. */
+  resize([width, height, bpp]: [number, number, number]): void {
+    this.graphical = bpp !== 0;
+    if (this.graphical) return;
+    this.columns = width;
+    this.cells = new Array(width * height).fill(0x20);
+  }
+
+  /** Rows of text, trailing blanks trimmed. */
+  rows(): string[] {
+    const rows: string[] = [];
+    for (let start = 0; start < this.cells.length; start += this.columns) {
+      let row = "";
+      for (const code of this.cells.slice(start, start + this.columns)) {
+        // Code page 437 matches ASCII for printable bytes; show the rest as spaces.
+        row += code >= 0x20 && code < 0x7f ? String.fromCharCode(code) : " ";
+      }
+      rows.push(row.trimEnd());
+    }
+    return rows;
+  }
+
+  text(): string {
+    return this.rows().join("\n");
+  }
 }

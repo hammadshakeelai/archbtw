@@ -22,9 +22,6 @@ class FakeEmulator {
   keyboard_set_enabled(enabled: boolean): void {
     this.keyboardEnabled = enabled;
   }
-  read_memory(_offset: number, length: number): Uint8Array {
-    return new Uint8Array(length);
-  }
   async destroy(): Promise<void> {
     this.destroyed = true;
   }

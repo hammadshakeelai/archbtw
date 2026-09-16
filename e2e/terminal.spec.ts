@@ -3,7 +3,7 @@ import { PROMPT } from "../src/lib/guest.ts";
 
 /**
  * These boot the real guest and assert on what the guest prints, read from
- * VGA text memory. A page that merely renders would pass a DOM check with a
+ * v86's screen events. A page that merely renders would pass a DOM check with a
  * broken image, so every test waits for output only a working Linux produces.
  *
  * Commands print markers built by the shell (`btw$((6*7))` -> `btw42`) so a

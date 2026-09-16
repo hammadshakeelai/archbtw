@@ -11,6 +11,11 @@ describe("bootCmdline", () => {
     expect(consoles?.at(-1)).toBe("console=tty1");
   });
 
+  it("keeps the console in text mode and skips the serial login prompt", () => {
+    expect(bootCmdline()).toContain("nomodeset");
+    expect(bootCmdline()).toContain("systemd.mask=serial-getty@ttyS0.service");
+  });
+
   it("sends the console to serial in debug mode, where the builder can print it", () => {
     const consoles = bootCmdline(true).match(/console=\S+/g);
     expect(consoles?.at(-1)).toBe("console=ttyS0");

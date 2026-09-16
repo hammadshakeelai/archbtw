@@ -42,5 +42,10 @@ export function bootCmdline(debug = false): string {
   const quiet = debug
     ? "loglevel=7 systemd.show_status=true console=tty1 console=ttyS0"
     : "quiet loglevel=3 systemd.show_status=false rd.udev.log_level=3 console=ttyS0 console=tty1";
-  return `${root} ${quiet} mitigations=off nowatchdog`;
+  // nomodeset keeps the console in VGA text mode: a framebuffer console is far
+  // slower under emulation and has no text for the builder to check. A console
+  // on ttyS0 makes systemd start a login prompt there too; nobody can reach
+  // it, so it is masked.
+  const machine = "nomodeset systemd.mask=serial-getty@ttyS0.service";
+  return `${root} ${quiet} ${machine} mitigations=off nowatchdog`;
 }

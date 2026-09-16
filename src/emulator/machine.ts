@@ -21,11 +21,11 @@ export interface Emulator {
   add_listener(event: "download-progress", listener: (progress: DownloadProgress) => void): void;
   add_listener(event: "9p-read-start", listener: (args: [string]) => void): void;
   add_listener(event: "9p-read-end", listener: (args: [string, number]) => void): void;
+  add_listener(event: "screen-put-char" | "screen-set-size", listener: (args: [number, number, number]) => void): void;
   add_listener(event: "download-error" | "emulator-started" | "screen-set-size", listener: () => void): void;
   keyboard_send_scancodes(codes: number[]): void;
   keyboard_send_text(text: string): void;
   keyboard_set_enabled(enabled: boolean): void;
-  read_memory(offset: number, length: number): Uint8Array;
   destroy(): Promise<void>;
 }
 

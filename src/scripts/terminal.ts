@@ -1,6 +1,6 @@
 import wasmUrl from "v86/build/v86.wasm?url";
 import { v86Options } from "../lib/config.ts";
-import { textRows, VGA_TEXT_BASE, VGA_TEXT_WINDOW } from "../lib/vga.ts";
+import { TextScreen } from "../lib/vga.ts";
 import { Machine, type Emulator, type MachineState } from "../emulator/machine.ts";
 import { createScreen, fitScreen, type ScreenElements } from "../emulator/screen.ts";
 import { chord, interpretInput, isUnidentified, tap, type Modifier, type SpecialKey } from "../input/keys.ts";
@@ -30,6 +30,8 @@ const touch = matchMedia("(pointer: coarse)").matches;
 keybar.hidden = !touch;
 
 let screen: ScreenElements = createScreen(document);
+/** A text copy of the guest's screen, for the end-to-end tests. */
+let textScreen = new TextScreen();
 
 // ------------------------------------------------------------------ status line
 
@@ -125,7 +127,12 @@ async function start(): Promise<void> {
   screen = createScreen(document);
   stage.prepend(screen.sizer);
   reading.textContent = "";
+  textScreen = new TextScreen();
+  // start() returns once the emulator exists, before the snapshot has
+  // downloaded, so these catch the full redraw that follows the restore.
   await machine.start(v86Options({ wasmUrl, base }, screen.container));
+  machine.guest?.add_listener("screen-put-char", (args) => textScreen.put(args));
+  machine.guest?.add_listener("screen-set-size", (args) => textScreen.resize(args));
 }
 
 new ResizeObserver(() => fit()).observe(stage);
@@ -241,10 +248,7 @@ declare global {
 }
 window.archbtw = {
   state: () => machine.current,
-  screenText: () => {
-    const guest = machine.guest;
-    return guest ? textRows(guest.read_memory(VGA_TEXT_BASE, VGA_TEXT_WINDOW)) : [];
-  },
+  screenText: () => textScreen.rows(),
 };
 
 void start();
