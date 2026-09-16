@@ -1,3 +1,4 @@
+import { releaseModifiers } from "../input/keys.ts";
 import { DownloadMeter, StallWatch } from "./downloads.ts";
 
 export type MachineError = "download" | "stalled" | "no-wasm";
@@ -35,6 +36,8 @@ export interface MachineDeps {
   now(): number;
   /** Calls `fn` every `ms` milliseconds and returns a function that stops it. */
   every(ms: number, fn: () => void): () => void;
+  /** Calls `fn` once after `ms` milliseconds. */
+  later(ms: number, fn: () => void): void;
   onState(state: MachineState): void;
   /** The guest read a file over 9p; the first read of a file downloads it. */
   onRead(name: string, bytes: number): void;
@@ -43,6 +46,8 @@ export interface MachineDeps {
 }
 
 export const STALL_MS = 60_000;
+/** Comfortably longer than v86's 10 ms hold on Left Ctrl presses. */
+export const MODIFIER_SETTLE_MS = 100;
 const STALL_CHECK_MS = 5_000;
 
 export class Machine {
@@ -53,6 +58,8 @@ export class Machine {
   private meter = new DownloadMeter();
   private stall = new StallWatch(STALL_MS);
   private generation = 0;
+  /** A new emulator starts with the keyboard. */
+  private keyboardEnabled = true;
 
   constructor(deps: MachineDeps) {
     this.deps = deps;
@@ -75,6 +82,7 @@ export class Machine {
     }
     this.meter = new DownloadMeter();
     this.stall = new StallWatch(STALL_MS);
+    this.keyboardEnabled = true;
     this.setState({ kind: "resuming", downloadedMB: 0, expectedMB: 0 });
 
     const emulator = await this.deps.create(options);
@@ -120,7 +128,21 @@ export class Machine {
   }
 
   setKeyboardEnabled(enabled: boolean): void {
+    if (enabled === this.keyboardEnabled) return;
+    this.keyboardEnabled = enabled;
     this.emulator?.keyboard_set_enabled(enabled);
+    if (enabled) return;
+
+    // Keys held when the keyboard goes away would never be released in the
+    // guest. Release them now, and again once v86 has sent anything it was
+    // holding back: on Windows it delays every Left Ctrl press by 10 ms (to
+    // tell AltGr apart), so the Ctrl of Ctrl+] reaches the guest after focus
+    // has already moved, and after a release sent right away.
+    const emulator = this.emulator;
+    emulator?.keyboard_send_scancodes(releaseModifiers());
+    this.deps.later(MODIFIER_SETTLE_MS, () => {
+      if (this.emulator === emulator && !this.keyboardEnabled) emulator?.keyboard_send_scancodes(releaseModifiers());
+    });
   }
 
   private fail(error: MachineError): void {

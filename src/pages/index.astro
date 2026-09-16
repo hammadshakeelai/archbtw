@@ -24,7 +24,17 @@ const description =
     />
   </head>
   <body>
-    <main class="stage" id="stage" data-base={base}>
+    <main
+      class="stage"
+      id="stage"
+      data-base={base}
+      tabindex="0"
+      aria-label="Arch Linux terminal"
+      aria-describedby="terminal-help">
+      <p class="visually-hidden" id="terminal-help">
+        Typing goes to the Linux machine, including Tab. Press Control and right square bracket to move focus to
+        the page controls.
+      </p>
       <span class="boot-cursor" id="boot-cursor" aria-hidden="true"></span>
       <div class="notice" id="notice" role="alert" hidden>
         <p id="notice-text"></p>
@@ -55,12 +65,13 @@ const description =
 
     <footer class="status">
       <div class="progress" id="progress" aria-hidden="true"></div>
-      <a class="brand" href="https://github.com/hammadshakeelai/archbtw">archbtw</a>
+      <a class="brand" id="brand" href="https://github.com/hammadshakeelai/archbtw">archbtw</a>
       <p class="activity">
         <span id="state" aria-live="polite">Downloading the machine</span>
         <span class="reading" id="reading"></span>
       </p>
       <p class="fetched" id="fetched"></p>
+      <p class="hint" aria-hidden="true"><kbd>Ctrl</kbd>+<kbd>]</kbd> leaves the terminal</p>
       <div class="actions">
         <button type="button" id="fullscreen">Full screen</button>
         <button type="button" id="restart">Restart</button>
@@ -142,6 +153,25 @@ const description =
 
       /* Clipped to its own size, which fitScreen sets to the scaled screen: until
          the first fit it is 0 by 0, so the unscaled screen can't add scrollbars. */
+      /* Focus lands here on load, so only mark it for keyboard navigation. */
+      .stage:focus {
+        outline: none;
+      }
+
+      .stage:focus-visible {
+        outline: 2px solid var(--arch-blue);
+        outline-offset: -2px;
+      }
+
+      .visually-hidden {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        overflow: hidden;
+        clip-path: inset(50%);
+        white-space: nowrap;
+      }
+
       .screen-sizer {
         position: relative;
         margin: auto;
@@ -312,6 +342,25 @@ const description =
       .actions {
         display: flex;
         gap: 8px;
+      }
+
+      /* Only for a hardware keyboard, and only where there's room. */
+      .hint {
+        display: none;
+        margin: 0;
+        color: var(--vga-dark-grey);
+        white-space: nowrap;
+      }
+
+      .hint kbd {
+        font: inherit;
+        color: var(--vga-grey);
+      }
+
+      @media (pointer: fine) and (min-width: 1000px) {
+        .hint {
+          display: block;
+        }
       }
 
       @media (max-width: 640px) {

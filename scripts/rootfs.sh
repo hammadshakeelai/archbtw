@@ -25,7 +25,11 @@ OVERLAY=$ROOT_DIR/rootfs/overlay
 
 # The v86 commit the npm package (0.5.460+g73077e9) was built from. The 9p
 # tools must match the runtime that reads their output.
-V86_COMMIT=73077e9
+V86_COMMIT=73077e92bf0d6079f59303fcd20387c01fe2daaf
+V86_TOOL_SHA256=(
+    "546b0ce7d0b172fa855587209318a8d473bce6de23fa327ceeb5b6c115fda23f  fs2json.py"
+    "7bfb94736afbb9753b6deea922184eec2f9b205be0214bc5f9866cf990bfa77c  copy-to-sha256.py"
+)
 
 # GitHub Pages publishes at most 1 GB. The compressed 9p tree must leave room
 # for the state snapshot and the site itself.
@@ -93,6 +97,9 @@ mkdir -p "$TOOLS"
 for tool in fs2json.py copy-to-sha256.py; do
     curl -fsSL --retry 3 -o "$TOOLS/$tool" "https://raw.githubusercontent.com/copy/v86/$V86_COMMIT/tools/$tool"
 done
+# These run as root over the whole root filesystem, so pin their contents too.
+(cd "$TOOLS" && printf '%s\n' "${V86_TOOL_SHA256[@]}" | sha256sum -c --quiet) ||
+    die "v86's 9p tools don't match their pinned SHA-256"
 
 # ------------------------------------------------------------------ download
 
@@ -111,16 +118,17 @@ export MIRROR_LIST="$(head -1 "$BUILD/packages.tsv") https://de.mirror.archlinux
 
 fetch_package() {
     local repo=$1 file=$2 sum=$3 dest=$CACHE/$2 mirror
-    if [[ -f $dest ]] && echo "$sum  $dest" | sha256sum -c --status; then
+    if [[ -f $dest && -f $dest.sig ]] && echo "$sum  $dest" | sha256sum -c --status; then
         return 0
     fi
     for mirror in $MIRROR_LIST; do
         if curl -fsSL --retry 3 --max-time 600 -o "$dest.part" "$mirror/i686/$repo/$file"; then
-            if echo "$sum  $dest.part" | sha256sum -c --status; then
+            if echo "$sum  $dest.part" | sha256sum -c --status &&
+                curl -fsSL --retry 3 --max-time 60 -o "$dest.sig" "$mirror/i686/$repo/$file.sig"; then
                 mv "$dest.part" "$dest"
                 return 0
             fi
-            echo "checksum mismatch: $file from $mirror" >&2
+            echo "checksum mismatch or no signature: $file from $mirror" >&2
         fi
     done
     rm -f "$dest.part"
@@ -159,27 +167,44 @@ done
 mkdir -p "$ROOTFS/etc"
 cp -r "$OVERLAY/etc/mkinitcpio.conf.d" "$OVERLAY/etc/initcpio" "$ROOTFS/etc/"
 
-# A build-only pacman config. Signatures are skipped because the guest's
-# keyring is not initialised; every package was already checked against the
-# SHA-256 in its repo database above.
+# A build-only pacman config. The repo databases aren't signed, so the SHA-256
+# checks above only prove a package matches the mirror's own database. Each
+# package's signature proves Arch Linux 32 built it.
 cat >"$ROOTFS/archbtw-pacman.conf" <<'EOF'
 [options]
 RootDir     = /
 DBPath      = /var/lib/pacman/
 CacheDir    = /var/cache/pacman/pkg/
 Architecture = i686
-SigLevel    = Never
-LocalFileSigLevel = Never
+SigLevel    = Required DatabaseNever
+LocalFileSigLevel = Required
 EOF
 cut -f2 <(tail -n +2 "$BUILD/packages.tsv") | sed 's|^|/var/cache/pacman/pkg/|' >"$ROOTFS/archbtw-packages.txt"
 
+log "Checking the signing keys"
+# The keyring came from the same mirror as the packages, so a hostile mirror
+# could ship its own keys. Only build if it trusts exactly the pinned masters.
+TRUSTED=$ROOTFS/usr/share/pacman/keyrings/archlinux32-trusted
+[[ -f $TRUSTED ]] || die "archlinux32-keyring is missing from the package set"
+diff <(cut -d: -f1 "$TRUSTED" | sort) <(grep -v '^#' "$ROOT_DIR/rootfs/trusted-keys.txt" | sort) ||
+    die "archlinux32-keyring trusts a different set of master keys than rootfs/trusted-keys.txt"
+echo "keyring trusts the $(grep -vc '^#' "$ROOT_DIR/rootfs/trusted-keys.txt") pinned master keys"
+
 log "Installing packages with the guest's own pacman"
 mount_chroot
+in_chroot pacman-key --init >/dev/null
+in_chroot pacman-key --populate archlinux32 >/dev/null
 # Reinstalling over the extracted files registers every package in pacman's
 # local database and runs the install scriptlets and hooks (users, groups,
 # ldconfig, ca-certificates, the kernel image in /boot).
 in_chroot /usr/bin/bash -c \
     'pacman -U --noconfirm --noprogressbar --overwrite "*" --config /archbtw-pacman.conf $(cat /archbtw-packages.txt)'
+echo "all $PACKAGE_COUNT package signatures verified"
+
+# The keyring holds a secret key that pacman-key --init generated. Every
+# visitor would get a copy, so it doesn't ship: the offline guest can't use it.
+in_chroot gpgconf --homedir /etc/pacman.d/gnupg --kill all 2>/dev/null || true
+rm -rf "$ROOTFS/etc/pacman.d/gnupg"
 
 # ------------------------------------------------------------------ configure
 

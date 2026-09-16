@@ -18,6 +18,16 @@ describe("parseLock", () => {
     expect(() => parseLock(JSON.stringify({ ...valid, url: "https://example.com/x.tar" }))).toThrow(/GitHub/);
   });
 
+  it.each([
+    ["a lookalike host", "https://github.com.evil.example/o/r/releases/download/t/a.tar"],
+    ["credentials that hide the real host", "https://github.com@evil.example/o/r/releases/download/t/a.tar"],
+    ["plain http", "http://github.com/o/r/releases/download/t/a.tar"],
+    ["a page that isn't a release download", "https://github.com/o/r/blob/main/a.tar"],
+    ["a path that climbs out", "https://github.com/o/r/releases/download/../../a.tar"],
+  ])("rejects %s", (_, url) => {
+    expect(() => parseLock(JSON.stringify({ ...valid, url }))).toThrow(/GitHub/);
+  });
+
   it("rejects a malformed checksum", () => {
     expect(() => parseLock(JSON.stringify({ ...valid, sha256: "ABC" }))).toThrow(/sha256/);
   });

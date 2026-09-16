@@ -1,0 +1,101 @@
+name: Health
+
+# The live site, in every browser and on every kind of device, plus a check
+# that the package manifest still resolves against archlinux32's rolling
+# repositories. Runs after each deploy, weekly, and on demand; a failed
+# scheduled run opens (or updates) an issue.
+
+on:
+  workflow_run:
+    workflows: [Deploy]
+    types: [completed]
+  schedule:
+    - cron: "0 6 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: health
+  cancel-in-progress: true
+
+jobs:
+  packages:
+    name: Manifest resolves
+    if: github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: npm
+
+      - run: npm ci
+      - run: npm run resolve
+
+  browsers:
+    name: Live site on ${{ matrix.project }}
+    if: github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success'
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - { project: desktop-chromium, browser: chromium }
+          - { project: desktop-firefox, browser: firefox }
+          - { project: desktop-webkit, browser: webkit }
+          - { project: android, browser: chromium }
+          - { project: iphone, browser: webkit }
+          - { project: ipad, browser: webkit }
+    env:
+      SITE_URL: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: npm
+
+      - run: npm ci
+
+      - run: npx playwright install --with-deps ${{ matrix.browser }}
+
+      # Pages can take a minute to serve a fresh deploy.
+      - name: Wait for the site
+        run: |
+          for attempt in $(seq 1 20); do
+            curl -fsS -o /dev/null "$SITE_URL" && exit 0
+            sleep 15
+          done
+          echo "::error::$SITE_URL did not respond"
+          exit 1
+
+      - run: npx playwright test --project=${{ matrix.project }}
+
+  report:
+    name: Open an issue
+    needs: [packages, browsers]
+    if: failure() && github.event_name == 'schedule'
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+    steps:
+      - env:
+          GH_TOKEN: ${{ github.token }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          body="The weekly health check failed: ${RUN_URL}"
+          gh label create health --repo "$GITHUB_REPOSITORY" --color d93f0b \
+            --description "The live site or the package manifest has a problem" 2>/dev/null || true
+          number=$(gh issue list --repo "$GITHUB_REPOSITORY" --label health --state open --json number --jq '.[0].number')
+          if [ -n "$number" ]; then
+            gh issue comment "$number" --repo "$GITHUB_REPOSITORY" --body "$body"
+          else
+            gh issue create --repo "$GITHUB_REPOSITORY" --title "Health check failed" --label health --body "$body"
+          fi

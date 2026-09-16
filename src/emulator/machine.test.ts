@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vitest";
+import { releaseModifiers } from "../input/keys.ts";
 import { Machine, STALL_MS, type DownloadProgress, type Emulator, type MachineState } from "./machine.ts";
 
 type Listener = (payload: unknown) => void;
@@ -33,6 +34,7 @@ function setup(options: { wasm?: boolean } = {}) {
   const emulators: FakeEmulator[] = [];
   let now = 0;
   let tick: (() => void) | null = null;
+  const pending: (() => void)[] = [];
   const machine = new Machine({
     create: async () => {
       const emulator = new FakeEmulator();
@@ -47,6 +49,9 @@ function setup(options: { wasm?: boolean } = {}) {
         tick = null;
       };
     },
+    later: (_ms, fn) => {
+      pending.push(fn);
+    },
     onState: (state) => states.push(state),
     onRead: (name, bytes) => reads.push([name, bytes]),
     onScreenSizeChange: () => {},
@@ -59,6 +64,10 @@ function setup(options: { wasm?: boolean } = {}) {
     advance: (ms: number) => {
       now += ms;
       tick?.();
+    },
+    /** Run every `later` callback scheduled so far. */
+    settle: () => {
+      for (const fn of pending.splice(0)) fn();
     },
   };
 }
@@ -113,12 +122,48 @@ describe("Machine", () => {
     expect(emulators[1].destroyed).toBe(false);
   });
 
-  it("forwards key presses and keyboard focus to the guest", async () => {
+  it("forwards key presses to the guest", async () => {
     const { machine, emulators } = setup();
     await machine.start({});
     machine.sendScancodes([0x01, 0x81]);
-    machine.setKeyboardEnabled(false);
     expect(emulators[0].scancodes).toEqual([[0x01, 0x81]]);
+  });
+
+  it("releases held modifiers when taking the keyboard away, and again once v86's delayed Ctrl has gone", async () => {
+    const { machine, emulators, settle } = setup();
+    await machine.start({});
+    machine.setKeyboardEnabled(false);
+    expect(emulators[0].scancodes).toEqual([releaseModifiers()]);
     expect(emulators[0].keyboardEnabled).toBe(false);
+
+    settle();
+    expect(emulators[0].scancodes).toEqual([releaseModifiers(), releaseModifiers()]);
+
+    // Focus moving between two buttons changes nothing.
+    machine.setKeyboardEnabled(false);
+    settle();
+    expect(emulators[0].scancodes).toHaveLength(2);
+  });
+
+  it("skips the delayed release if the terminal took the keyboard back first", async () => {
+    const { machine, emulators, settle } = setup();
+    await machine.start({});
+    machine.setKeyboardEnabled(false);
+    machine.setKeyboardEnabled(true);
+    settle();
+    expect(emulators[0].scancodes).toEqual([releaseModifiers()]);
+    expect(emulators[0].keyboardEnabled).toBe(true);
+  });
+
+  it("gives a restarted machine the keyboard, and doesn't touch the old one", async () => {
+    const { machine, emulators, settle } = setup();
+    await machine.start({});
+    machine.setKeyboardEnabled(false);
+    await machine.start({});
+    settle();
+    expect(emulators[0].scancodes).toEqual([releaseModifiers()]);
+
+    machine.setKeyboardEnabled(false);
+    expect(emulators[1].scancodes).toEqual([releaseModifiers()]);
   });
 });

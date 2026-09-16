@@ -82,9 +82,28 @@ jobs:
             cat build/out/snapshot-report.json
             echo '```'
           } > build/release-notes.md
-          gh release create "$TAG" \
-            build/archbtw-images.tar build/out/rootfs-report.txt build/out/snapshot-report.json \
-            --title "Guest $TAG" --notes-file build/release-notes.md
+          # A GitHub 5xx halfway through once threw away a finished 15-minute
+          # build. Create a draft, upload with retries (re-running this step is
+          # safe), check the tar arrived whole, and only then publish.
+          assets="build/archbtw-images.tar build/out/rootfs-report.txt build/out/snapshot-report.json"
+          for attempt in 1 2 3 4 5; do
+            if gh release view "$TAG" >/dev/null 2>&1 ||
+              gh release create "$TAG" --draft --title "Guest $TAG" --notes-file build/release-notes.md; then
+              # shellcheck disable=SC2086
+              if gh release upload "$TAG" $assets --clobber; then
+                break
+              fi
+            fi
+            echo "::warning::publishing $TAG failed (attempt $attempt); retrying"
+            sleep $((attempt * 20))
+          done
+          uploaded=$(gh release view "$TAG" --json assets --jq '.assets[] | select(.name == "archbtw-images.tar") | .size')
+          [ "$uploaded" = "$(stat -c %s build/archbtw-images.tar)" ] ||
+            { echo "::error::archbtw-images.tar on the release is ${uploaded:-missing}, not the built size"; exit 1; }
+          gh release edit "$TAG" --draft=false --latest
+          # Drafts have no public download URL, so check the published one.
+          curl -fsIL --retry 5 --retry-delay 10 \
+            "https://github.com/${GITHUB_REPOSITORY}/releases/download/$TAG/archbtw-images.tar" >/dev/null
 
       - name: Point the site at the new guest
         env:

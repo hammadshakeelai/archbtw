@@ -66,8 +66,10 @@ jobs:
       - if: steps.guest.outputs.ready == 'true'
         run: npx playwright install --with-deps chromium
 
+      # The fast gate: Chromium with a keyboard and with touch. Every other
+      # browser and device runs against the live site in health.yml.
       - if: steps.guest.outputs.ready == 'true'
-        run: npm run test:e2e
+        run: npm run test:e2e -- --project=desktop-chromium --project=android
 
       - name: Check the site fits GitHub Pages
         if: steps.guest.outputs.ready == 'true'

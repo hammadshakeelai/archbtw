@@ -46,6 +46,19 @@ export function chord(modifier: Modifier, letter: string): number[] | null {
   return [held, code, code | 0x80, held | 0x80];
 }
 
+/**
+ * Release every modifier: both Ctrls, both Alts, both Shifts.
+ *
+ * Sent whenever the page takes the keyboard away from the guest. Ctrl+], for
+ * one, presses Ctrl while the guest has the keyboard and releases it after
+ * focus has moved on; without this the guest would think Ctrl was still held
+ * and turn the next thing typed into control characters. A release for a key
+ * that isn't down is harmless.
+ */
+export function releaseModifiers(): number[] {
+  return [0x9d, 0xe0, 0x9d, 0xb8, 0xe0, 0xb8, 0xaa, 0xb6];
+}
+
 export type SoftInput =
   | { kind: "text"; text: string }
   | { kind: "scancodes"; codes: number[] }

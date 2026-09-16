@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
-    "preview": "astro preview --port 4321",
+    "preview": "astro preview --host 127.0.0.1 --port 4321",
     "typecheck": "astro check",
     "test": "vitest run",
     "test:e2e": "playwright test",

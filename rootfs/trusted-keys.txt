@@ -1,0 +1,12 @@
+# Arch Linux 32 master signing keys: the fingerprints in archlinux32-keyring's
+# archlinux32-trusted file (package archlinux32-keyring 20251214-1.0).
+#
+# scripts/rootfs.sh refuses to build if the keyring it downloads trusts any
+# other set, so a mirror can't swap in its own keys. If Arch Linux 32 really
+# does rotate a master key, check the change against https://archlinux32.org
+# before updating this file.
+194E37A47A4C671807BACB37B1117BC1094EA6E9
+A0B250C0FC9FC079EC04ADB7A50C0F20AEC3AF00
+C426F2CED2D759ECEA1FA78A4BA3B2E330891150
+CE0BDE71A759A87F23F0F7D8B61DBCE10901C163
+D92CDDC155BCC8F550B5FCEC30AB721FE7400FCD

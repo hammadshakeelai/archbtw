@@ -12,9 +12,9 @@
 
 import { createHash } from "node:crypto";
 import { spawnSync } from "node:child_process";
-import { createWriteStream, existsSync } from "node:fs";
+import { createReadStream, createWriteStream, existsSync } from "node:fs";
 import { mkdir, readFile, rm, writeFile } from "node:fs/promises";
-import { dirname, join, resolve } from "node:path";
+import { dirname, join, relative, resolve } from "node:path";
 import { Readable, Transform } from "node:stream";
 import { pipeline } from "node:stream/promises";
 import { fileURLToPath } from "node:url";
@@ -34,12 +34,28 @@ const IMAGES = join(ROOT, "public", "images");
 const STAMP = join(IMAGES, ".sha256");
 const DOWNLOAD = join(ROOT, "build", "images.tar");
 
+/** An https://github.com/<owner>/<repo>/releases/download/... URL, parsed rather than prefix-matched. */
+function isReleaseDownload(url: string): boolean {
+  try {
+    const parsed = new URL(url);
+    return (
+      parsed.protocol === "https:" &&
+      parsed.hostname === "github.com" &&
+      parsed.port === "" &&
+      parsed.username === "" &&
+      /^\/[^/]+\/[^/]+\/releases\/download\/[^/]+\/[^/]+$/.test(parsed.pathname)
+    );
+  } catch {
+    return false;
+  }
+}
+
 /** Reject a lock that could point the build somewhere unexpected. */
 export function parseLock(text: string): ImagesLock {
   const lock = JSON.parse(text) as Partial<ImagesLock>;
   if (typeof lock.tag !== "string" || !lock.tag) throw new Error("images.lock.json: missing tag");
   if (typeof lock.asset !== "string" || !lock.asset) throw new Error("images.lock.json: missing asset");
-  if (typeof lock.url !== "string" || !lock.url.startsWith("https://github.com/")) {
+  if (typeof lock.url !== "string" || !isReleaseDownload(lock.url)) {
     throw new Error("images.lock.json: url must be a GitHub release download");
   }
   if (typeof lock.sha256 !== "string" || !/^[0-9a-f]{64}$/.test(lock.sha256)) {
@@ -49,8 +65,19 @@ export function parseLock(text: string): ImagesLock {
   return lock as ImagesLock;
 }
 
+async function sha256Of(path: string): Promise<string> {
+  const hash = createHash("sha256");
+  await pipeline(createReadStream(path), hash);
+  return hash.digest("hex");
+}
+
 async function download(lock: ImagesLock): Promise<void> {
   await mkdir(dirname(DOWNLOAD), { recursive: true });
+  // A run that failed after downloading leaves the verified tar behind.
+  if (existsSync(DOWNLOAD) && (await sha256Of(DOWNLOAD)) === lock.sha256) {
+    console.log("  already downloaded");
+    return;
+  }
   const response = await fetch(lock.url, { redirect: "follow" });
   if (!response.ok || !response.body) throw new Error(`download failed: HTTP ${response.status} for ${lock.url}`);
 
@@ -97,7 +124,8 @@ async function main(): Promise<void> {
   console.log("Unpacking into public/images/");
   await rm(IMAGES, { recursive: true, force: true });
   await mkdir(IMAGES, { recursive: true });
-  const untar = spawnSync("tar", ["-xf", DOWNLOAD, "-C", IMAGES], { stdio: "inherit" });
+  // A relative archive path: GNU tar reads "C:\..." as a remote host "C".
+  const untar = spawnSync("tar", ["-xf", relative(IMAGES, DOWNLOAD)], { cwd: IMAGES, stdio: "inherit" });
   if (untar.status !== 0) throw new Error("tar could not unpack the images");
   if (!existsSync(join(IMAGES, IMAGE_PATHS.state))) throw new Error(`the images tar has no ${IMAGE_PATHS.state}`);
 

@@ -120,6 +120,9 @@ const machine = new Machine({
     const id = setInterval(fn, ms);
     return () => clearInterval(id);
   },
+  later: (ms, fn) => {
+    setTimeout(fn, ms);
+  },
   onState: render,
   onRead,
   onScreenSizeChange: () => requestAnimationFrame(fit),
@@ -139,21 +142,47 @@ async function start(): Promise<void> {
 }
 
 new ResizeObserver(() => fit()).observe(stage);
-retry.addEventListener("click", () => void start());
-restartButton.addEventListener("click", () => void start());
+// Focus goes back to the terminal: a fresh machine starts with the keyboard,
+// and leaving focus on the button would send the next Enter to the guest.
+retry.addEventListener("click", () => void start().then(() => stage.focus({ preventScroll: true })));
+restartButton.addEventListener("click", () => void start().then(() => stage.focus({ preventScroll: true })));
 
 // ------------------------------------------------------------------ keyboard
 
-// v86 takes every key pressed anywhere on the page. While a toolbar button has
-// focus, hand the keyboard back so Enter and Space press the button.
-for (const bar of [keybar, element("restart").parentElement!]) {
-  bar.addEventListener("focusin", () => machine.setKeyboardEnabled(false));
-  bar.addEventListener("focusout", () => machine.setKeyboardEnabled(true));
+// v86 takes every key pressed anywhere on the page, so it only gets the
+// keyboard while the terminal (or nothing in particular) has focus. Buttons
+// and links get their keys back, so Enter and Space press them.
+function keysGoToGuest(target: EventTarget | null): boolean {
+  return !(target instanceof HTMLElement) || target === stage || target === phoneKeyboard || target === document.body;
+}
+document.addEventListener("focusin", (event) => machine.setKeyboardEnabled(keysGoToGuest(event.target)));
+document.addEventListener("focusout", (event) => {
+  if (!event.relatedTarget) machine.setKeyboardEnabled(true);
+});
+
+// Tab belongs to the shell, so keyboard users need another way out of the
+// terminal: Ctrl+], the escape character telnet used for the same job.
+window.addEventListener(
+  "keydown",
+  (event) => {
+    if (!event.ctrlKey || event.code !== "BracketRight") return;
+    event.preventDefault();
+    event.stopImmediatePropagation();
+    const firstControl = [fullscreenButton, restartButton].find((button) => !button.hidden);
+    (firstControl ?? element("brand")).focus();
+  },
+  true,
+);
+
+function focusTerminal(): void {
+  if (touch) phoneKeyboard.focus();
+  else stage.focus({ preventScroll: true });
 }
 
-stage.addEventListener("click", () => {
-  (document.activeElement as HTMLElement | null)?.blur();
-  if (touch) phoneKeyboard.focus();
+stage.addEventListener("click", (event) => {
+  // Leave the notice's own button, and text selection, alone.
+  if ((event.target as HTMLElement).closest("button") || getSelection()?.toString()) return;
+  focusTerminal();
 });
 
 // Sticky modifiers from the key bar apply to the next letter typed.
@@ -261,4 +290,7 @@ window.archbtw = {
   screenText: () => textScreen.rows(),
 };
 
-void start();
+void start().then(() => {
+  // So a hardware keyboard types into the machine without a click first.
+  if (!touch) stage.focus({ preventScroll: true });
+});
