@@ -262,7 +262,7 @@ in_chroot depmod "$KVER"
 unmount_chroot
 
 rm -rf \
-    "$ROOTFS"/usr/share/{doc,man,info,gtk-doc,help,i18n} \
+    "$ROOTFS"/usr/share/{doc,man,info,gtk-doc,help,i18n,gir-1.0} \
     "$ROOTFS"/usr/share/locale/* \
     "$ROOTFS"/usr/share/hwdata \
     "$ROOTFS"/usr/include \
@@ -313,7 +313,9 @@ FS_JSON_MB=$(du -sm "$OUT/fs.json" | cut -f1)
     echo "budget:              ${BUDGET_MB} MB"
     echo
     echo "largest directories after strip:"
-    du -xm --max-depth=3 "$ROOTFS/usr" 2>/dev/null | sort -rn | head -15 | sed "s|$ROOTFS||"
+    # sed rather than head: head exits early, and under pipefail the SIGPIPE
+    # that sort then gets would fail the whole build.
+    du -xm --max-depth=3 "$ROOTFS/usr" 2>/dev/null | sort -rn | sed -n "1,15s|$ROOTFS||p"
 } | tee "$OUT/rootfs-report.txt"
 
 ((ARCH_MB <= BUDGET_MB)) || die "9p tree is ${ARCH_MB} MB, over the ${BUDGET_MB} MB budget; drop a tier in scripts/manifest.mjs"
