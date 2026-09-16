@@ -155,9 +155,13 @@ restartButton.addEventListener("click", () => void start().then(() => stage.focu
 function keysGoToGuest(target: EventTarget | null): boolean {
   return !(target instanceof HTMLElement) || target === stage || target === phoneKeyboard || target === document.body;
 }
-document.addEventListener("focusin", (event) => machine.setKeyboardEnabled(keysGoToGuest(event.target)));
+function setKeyboardOwner(guest: boolean): void {
+  machine.setKeyboardEnabled(guest);
+  document.body.dataset.keyboard = guest ? "guest" : "page";
+}
+document.addEventListener("focusin", (event) => setKeyboardOwner(keysGoToGuest(event.target)));
 document.addEventListener("focusout", (event) => {
-  if (!event.relatedTarget) machine.setKeyboardEnabled(true);
+  if (!event.relatedTarget) setKeyboardOwner(true);
 });
 
 // Tab belongs to the shell, so keyboard users need another way out of the

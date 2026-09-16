@@ -86,9 +86,9 @@ log "Installing host tools"
 if command -v apt-get >/dev/null; then
     export DEBIAN_FRONTEND=noninteractive
     apt-get update -qq
-    apt-get install -y -qq curl zstd libarchive-tools python3 python3-zstandard util-linux >/dev/null
+    apt-get install -y -qq curl zstd libarchive-tools python3 python3-zstandard util-linux gnupg >/dev/null
 fi
-for tool in curl zstd bsdtar python3 setarch chroot sha256sum mountpoint; do
+for tool in curl zstd bsdtar python3 setarch chroot sha256sum mountpoint gpg; do
     command -v "$tool" >/dev/null || die "missing host tool: $tool"
 done
 python3 -c 'import zstandard' 2>/dev/null || die "python3 needs the zstandard module"
@@ -150,6 +150,71 @@ for repo in core extra; do
     curl -fsSL --retry 3 -o "$CACHE/$repo.db" "$SYNC_MIRROR/i686/$repo/$repo.db"
 done
 
+# ------------------------------------------------------------------ signatures
+
+# The repo databases the SHA-256 sums above come from aren't signed, so those
+# checks only prove a package matches the mirror's own database. Signatures
+# prove Arch Linux 32 built it, and they are checked before anything is
+# extracted.
+#
+# Not with pacman: pacman trusts a packager key only while three master keys
+# with unexpired certifications vouch for it, and one Arch Linux 32 master
+# (A50C0F20AEC3AF00) expired on 2026-01-16, which strands every package signed
+# by a key it helped certify. The policy here is Arch's own, minus that
+# expiry rule: a good signature, from a key that isn't revoked, certified by
+# at least three of the master keys pinned in rootfs/trusted-keys.txt.
+
+log "Checking the signing keys"
+KEYRING_FILE=$(awk -F'\t' '$2 ~ /^archlinux32-keyring-/ {print $2}' <(tail -n +2 "$BUILD/packages.tsv"))
+[[ -n $KEYRING_FILE ]] || die "archlinux32-keyring is missing from the package set"
+KEYRING_DIR=$BUILD/keyring
+rm -rf "$KEYRING_DIR" && mkdir -p "$KEYRING_DIR"
+bsdtar -xf "$CACHE/$KEYRING_FILE" -C "$KEYRING_DIR" usr/share/pacman/keyrings
+KEYRINGS=$KEYRING_DIR/usr/share/pacman/keyrings
+
+# The keyring came from the same mirror as the packages, so a hostile mirror
+# could ship its own keys. Only go on if it trusts exactly the pinned masters.
+PINNED=$(grep -v '^#' "$ROOT_DIR/rootfs/trusted-keys.txt" | sort)
+diff <(cut -d: -f1 "$KEYRINGS/archlinux32-trusted" | sort) <(echo "$PINNED") ||
+    die "archlinux32-keyring trusts a different set of master keys than rootfs/trusted-keys.txt"
+echo "keyring trusts the $(wc -l <<<"$PINNED") pinned master keys"
+
+export GNUPGHOME=$BUILD/gnupg
+rm -rf "$GNUPGHOME" && mkdir -m 700 -p "$GNUPGHOME"
+# gpg exits non-zero if any one key in the keyring can't be imported, so check
+# for what matters instead: every pinned master key made it in.
+gpg --batch --quiet --import "$KEYRINGS/archlinux32.gpg" 2>/dev/null || true
+while read -r master; do
+    gpg --batch --list-keys "$master" >/dev/null 2>&1 || die "pinned master key $master is not in archlinux32-keyring"
+done <<<"$PINNED"
+MASTER_IDS=$(cut -c25-40 <<<"$PINNED" | tr '\n' ' ')
+REVOKED=$(cut -d: -f1 "$KEYRINGS/archlinux32-revoked" 2>/dev/null | tr '\n' ' ')
+REQUIRED_CERTS=3
+
+log "Verifying package signatures"
+declare -A SIGNER_CERTS=()
+while read -r file; do
+    status=$(gpg --batch --status-fd 1 --verify "$CACHE/$file.sig" "$CACHE/$file" 2>/dev/null || true)
+    grep -q '^\[GNUPG:\] GOODSIG ' <<<"$status" || die "bad or missing signature: $file"
+    # VALIDSIG carries the signing (sub)key and, last, the primary key it belongs to.
+    signer=$(awk '$2 == "VALIDSIG" { print ($12 != "" ? $12 : $3) }' <<<"$status")
+    [[ -n $signer ]] || die "no valid signature: $file"
+    [[ " $REVOKED " != *" $signer "* ]] || die "$file is signed by revoked key $signer"
+    if [[ -z ${SIGNER_CERTS[$signer]+set} ]]; then
+        SIGNER_CERTS[$signer]=$(gpg --batch --check-sigs --with-colons "$signer" 2>/dev/null |
+            awk -F: -v masters="$MASTER_IDS" '
+                BEGIN { n = split(masters, m, " "); for (i = 1; i <= n; i++) pinned[m[i]] = 1 }
+                $1 == "sig" && $2 == "!" && ($5 in pinned) { seen[$5] = 1 }
+                END { print length(seen) }')
+    fi
+    ((${SIGNER_CERTS[$signer]} >= REQUIRED_CERTS)) ||
+        die "$file is signed by $signer, which only ${SIGNER_CERTS[$signer]} pinned master keys certify"
+done < <(cut -f2 <(tail -n +2 "$BUILD/packages.tsv"))
+for signer in "${!SIGNER_CERTS[@]}"; do
+    echo "signer $signer: certified by ${SIGNER_CERTS[$signer]} pinned master keys"
+done
+echo "all $PACKAGE_COUNT package signatures verified"
+
 # ------------------------------------------------------------------ bootstrap
 
 log "Extracting packages into a bootstrap root"
@@ -167,44 +232,26 @@ done
 mkdir -p "$ROOTFS/etc"
 cp -r "$OVERLAY/etc/mkinitcpio.conf.d" "$OVERLAY/etc/initcpio" "$ROOTFS/etc/"
 
-# A build-only pacman config. The repo databases aren't signed, so the SHA-256
-# checks above only prove a package matches the mirror's own database. Each
-# package's signature proves Arch Linux 32 built it.
+# A build-only pacman config. Signatures were verified above, under a policy
+# pacman can't express.
 cat >"$ROOTFS/archbtw-pacman.conf" <<'EOF'
 [options]
 RootDir     = /
 DBPath      = /var/lib/pacman/
 CacheDir    = /var/cache/pacman/pkg/
 Architecture = i686
-SigLevel    = Required DatabaseNever
-LocalFileSigLevel = Required
+SigLevel    = Never
+LocalFileSigLevel = Never
 EOF
 cut -f2 <(tail -n +2 "$BUILD/packages.tsv") | sed 's|^|/var/cache/pacman/pkg/|' >"$ROOTFS/archbtw-packages.txt"
 
-log "Checking the signing keys"
-# The keyring came from the same mirror as the packages, so a hostile mirror
-# could ship its own keys. Only build if it trusts exactly the pinned masters.
-TRUSTED=$ROOTFS/usr/share/pacman/keyrings/archlinux32-trusted
-[[ -f $TRUSTED ]] || die "archlinux32-keyring is missing from the package set"
-diff <(cut -d: -f1 "$TRUSTED" | sort) <(grep -v '^#' "$ROOT_DIR/rootfs/trusted-keys.txt" | sort) ||
-    die "archlinux32-keyring trusts a different set of master keys than rootfs/trusted-keys.txt"
-echo "keyring trusts the $(grep -vc '^#' "$ROOT_DIR/rootfs/trusted-keys.txt") pinned master keys"
-
 log "Installing packages with the guest's own pacman"
 mount_chroot
-in_chroot pacman-key --init >/dev/null
-in_chroot pacman-key --populate archlinux32 >/dev/null
 # Reinstalling over the extracted files registers every package in pacman's
 # local database and runs the install scriptlets and hooks (users, groups,
 # ldconfig, ca-certificates, the kernel image in /boot).
 in_chroot /usr/bin/bash -c \
     'pacman -U --noconfirm --noprogressbar --overwrite "*" --config /archbtw-pacman.conf $(cat /archbtw-packages.txt)'
-echo "all $PACKAGE_COUNT package signatures verified"
-
-# The keyring holds a secret key that pacman-key --init generated. Every
-# visitor would get a copy, so it doesn't ship: the offline guest can't use it.
-in_chroot gpgconf --homedir /etc/pacman.d/gnupg --kill all 2>/dev/null || true
-rm -rf "$ROOTFS/etc/pacman.d/gnupg"
 
 # ------------------------------------------------------------------ configure
 

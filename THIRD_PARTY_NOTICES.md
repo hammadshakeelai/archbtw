@@ -42,6 +42,13 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 - License: GNU Lesser General Public License v3
 - Source: https://review.coreboot.org/seabios.git, tag `rel-1.16.2`
 
+## Atkinson Hyperlegible Next and Atkinson Hyperlegible Mono
+
+The page's interface fonts, bundled from the npm packages `@fontsource/atkinson-hyperlegible-next` and `@fontsource/atkinson-hyperlegible-mono` (version 5.3.0).
+
+- Designed by the Braille Institute of America
+- License: SIL Open Font License 1.1 (https://openfontlicense.org)
+
 ## The Arch Linux guest
 
 The guest is built by `.github/workflows/rootfs.yml` from binary packages published by [Arch Linux 32](https://archlinux32.org), a community port of Arch Linux to 32-bit x86. It is not stored in this repository: it is attached to a [GitHub Release](../../releases) and published in the site's `images/` folder.

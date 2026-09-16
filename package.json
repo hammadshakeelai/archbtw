@@ -13,7 +13,8 @@
     "resolve": "node scripts/resolve.mjs",
     "why": "node scripts/why.mjs",
     "snapshot": "node scripts/snapshot.ts",
-    "images": "node scripts/images.ts"
+    "images": "node scripts/images.ts",
+    "screenshots": "node scripts/screenshots.ts"
   },
   "engines": {
     "node": ">=22.12.0"

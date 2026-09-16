@@ -38,6 +38,12 @@ const description =
     <meta property="og:title" content="archbtw" />
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
+    <meta property="og:url" content={new URL(base, Astro.site)} />
+    <meta property="og:image" content={new URL(`${base}og.png`, Astro.site)} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="neofetch on archbtw: Arch Linux 32 i686 on a Pentium III, 228 packages" />
+    <meta name="twitter:card" content="summary_large_image" />
     <link rel="icon" href={`${base}favicon.svg`} type="image/svg+xml" />
   </head>
   <body>
@@ -88,7 +94,10 @@ const description =
         <span class="reading" id="reading"></span>
       </p>
       <p class="fetched" id="fetched"></p>
-      <p class="hint" aria-hidden="true"><kbd>Ctrl</kbd>+<kbd>]</kbd> leaves the terminal</p>
+      <p class="hint" aria-hidden="true">
+        <span class="hint-guest"><kbd>Ctrl</kbd>+<kbd>]</kbd> leaves the terminal</span>
+        <span class="hint-page">Click the terminal to type</span>
+      </p>
       <div class="actions">
         <button type="button" id="fullscreen">Full screen</button>
         <button type="button" id="restart">Restart</button>
@@ -171,16 +180,11 @@ const description =
         cursor: text;
       }
 
-      /* Clipped to its own size, which fitScreen sets to the scaled screen: until
-         the first fit it is 0 by 0, so the unscaled screen can't add scrollbars. */
-      /* Focus lands here on load, so only mark it for keyboard navigation. */
+      /* Focus sits here whenever typing goes to the machine, so a ring would
+         never go away. The blinking cursor shows where typing goes, and the
+         status bar hint says when the keyboard has left the terminal. */
       .stage:focus {
         outline: none;
-      }
-
-      .stage:focus-visible {
-        outline: 2px solid var(--arch-blue);
-        outline-offset: -2px;
       }
 
       .visually-hidden {
@@ -192,11 +196,21 @@ const description =
         white-space: nowrap;
       }
 
+      /* Clipped to its own size, which fitScreen sets to the scaled screen: until
+         the first fit it is 0 by 0, so the unscaled screen can't add scrollbars. */
       .screen-sizer {
         position: relative;
         margin: auto;
         flex: none;
         overflow: hidden;
+      }
+
+      /* A phone keyboard covers the bottom half of a portrait screen, so keep
+         the terminal at the top rather than centred behind it. */
+      @media (orientation: portrait) and (pointer: coarse) {
+        .screen-sizer {
+          margin: 0 auto auto;
+        }
       }
 
       .v86-screen {
@@ -372,6 +386,16 @@ const description =
 
       .hint kbd {
         font: inherit;
+        color: var(--vga-grey);
+      }
+
+      .hint-page,
+      [data-keyboard="page"] .hint-guest {
+        display: none;
+      }
+
+      [data-keyboard="page"] .hint-page {
+        display: inline;
         color: var(--vga-grey);
       }
 
