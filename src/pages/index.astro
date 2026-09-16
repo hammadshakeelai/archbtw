@@ -1,0 +1,321 @@
+---
+const base = import.meta.env.BASE_URL.endsWith("/") ? import.meta.env.BASE_URL : `${import.meta.env.BASE_URL}/`;
+const description =
+  "A real Arch Linux running in your browser: archlinux32 in the v86 emulator, resumed at a root shell with sl, cmatrix, nyancat, cowsay and more installed.";
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>archbtw: Arch Linux in your browser</title>
+    <meta name="description" content={description} />
+    <meta name="theme-color" content="#000000" />
+    <meta property="og:title" content="archbtw" />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <link rel="icon" href={`${base}favicon.svg`} type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible+Mono:wght@400&family=Atkinson+Hyperlegible+Next:wght@400;700&display=swap"
+    />
+  </head>
+  <body>
+    <main class="stage" id="stage" data-base={base}>
+      <span class="boot-cursor" id="boot-cursor" aria-hidden="true"></span>
+      <div class="notice" id="notice" role="alert" hidden>
+        <p id="notice-text"></p>
+        <button type="button" id="retry">Try again</button>
+      </div>
+      <textarea
+        class="phone_keyboard"
+        id="phone-keyboard"
+        aria-label="Type into the terminal"
+        autocapitalize="off"
+        autocomplete="off"
+        autocorrect="off"
+        spellcheck="false"></textarea>
+    </main>
+
+    <div class="keybar" id="keybar" role="toolbar" aria-label="Keys your phone keyboard doesn't have" hidden>
+      <button type="button" data-key="Escape">Esc</button>
+      <button type="button" data-key="Tab">Tab</button>
+      <button type="button" data-modifier="ctrl" aria-pressed="false">Ctrl</button>
+      <button type="button" data-modifier="alt" aria-pressed="false">Alt</button>
+      <button type="button" data-chord="ctrl:c">Ctrl+C</button>
+      <button type="button" data-key="ArrowUp" aria-label="Up arrow">↑</button>
+      <button type="button" data-key="ArrowDown" aria-label="Down arrow">↓</button>
+      <button type="button" data-key="ArrowLeft" aria-label="Left arrow">←</button>
+      <button type="button" data-key="ArrowRight" aria-label="Right arrow">→</button>
+      <button type="button" id="show-keyboard" class="keybar-keyboard">Keyboard</button>
+    </div>
+
+    <footer class="status">
+      <div class="progress" id="progress" aria-hidden="true"></div>
+      <a class="brand" href="https://github.com/hammadshakeelai/archbtw">archbtw</a>
+      <p class="activity">
+        <span id="state" aria-live="polite">Downloading the machine</span>
+        <span class="reading" id="reading"></span>
+      </p>
+      <p class="fetched" id="fetched"></p>
+      <div class="actions">
+        <button type="button" id="fullscreen">Full screen</button>
+        <button type="button" id="restart">Restart</button>
+      </div>
+    </footer>
+
+    <script>
+      import "../scripts/terminal.ts";
+    </script>
+
+    <style is:global>
+      :root {
+        /* The VGA palette the guest draws with, plus Arch's own blue. */
+        --vga-black: #000000;
+        --vga-grey: #aaaaaa;
+        --vga-dark-grey: #555555;
+        --vga-white: #ffffff;
+        --vga-bright-red: #ff5555;
+        --arch-blue: #1793d1;
+
+        --ui: "Atkinson Hyperlegible Next", system-ui, sans-serif;
+        --path: "Atkinson Hyperlegible Mono", ui-monospace, monospace;
+        color-scheme: dark;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html,
+      body {
+        margin: 0;
+        height: 100%;
+        background: var(--vga-black);
+        color: var(--vga-grey);
+        font: 15px/1.4 var(--ui);
+      }
+
+      body {
+        display: grid;
+        grid-template-rows: minmax(0, 1fr) auto auto;
+        height: 100dvh;
+      }
+
+      button {
+        font: inherit;
+        color: var(--vga-white);
+        background: none;
+        border: 1px solid var(--vga-dark-grey);
+        border-radius: 3px;
+        padding: 4px 12px;
+        cursor: pointer;
+      }
+
+      button:hover {
+        border-color: var(--vga-grey);
+      }
+
+      button:focus-visible,
+      a:focus-visible {
+        outline: 2px solid var(--arch-blue);
+        outline-offset: 2px;
+      }
+
+      /* The screen area. A flex container with an auto-margined child centres
+         the screen yet still scrolls to its left edge when it's wider than a phone. */
+      .stage {
+        position: relative;
+        display: flex;
+        overflow: auto;
+        padding: 12px;
+        cursor: text;
+      }
+
+      .screen-sizer {
+        position: relative;
+        margin: auto;
+        flex: none;
+      }
+
+      .v86-screen {
+        position: absolute;
+        top: 0;
+        left: 0;
+        transform-origin: 0 0;
+        width: max-content;
+      }
+
+      .v86-text {
+        white-space: pre;
+        font: 16px/16px monospace;
+        color: var(--vga-grey);
+      }
+
+      .v86-canvas {
+        display: block;
+      }
+
+      .boot-cursor {
+        position: absolute;
+        top: 24px;
+        left: 24px;
+        width: 14px;
+        height: 3px;
+        background: var(--vga-grey);
+        animation: blink 1.06s steps(1) infinite;
+      }
+
+      @keyframes blink {
+        50% {
+          opacity: 0;
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .boot-cursor {
+          animation: none;
+        }
+      }
+
+      .notice {
+        margin: auto;
+        max-width: 36rem;
+        padding: 0 8px;
+        color: var(--vga-white);
+        font-size: 1.1rem;
+      }
+
+      .notice[data-tone="error"] p::before {
+        content: "";
+        display: block;
+        width: 32px;
+        height: 3px;
+        margin-bottom: 16px;
+        background: var(--vga-bright-red);
+      }
+
+      .notice button {
+        margin-top: 8px;
+      }
+
+      /* Focusable so phones open their keyboard, but never seen. 16px stops
+         iOS zooming the page when it gains focus. */
+      .phone_keyboard {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        width: 1px;
+        height: 1px;
+        opacity: 0;
+        border: 0;
+        padding: 0;
+        font-size: 16px;
+        resize: none;
+        pointer-events: none;
+      }
+
+      .keybar {
+        display: flex;
+        gap: 6px;
+        padding: 6px 12px;
+        overflow-x: auto;
+        border-top: 1px solid var(--vga-dark-grey);
+      }
+
+      .keybar[hidden] {
+        display: none;
+      }
+
+      .keybar button {
+        min-width: 44px;
+        min-height: 40px;
+        flex: none;
+      }
+
+      .keybar button[aria-pressed="true"] {
+        background: var(--arch-blue);
+        border-color: var(--arch-blue);
+      }
+
+      .keybar-keyboard {
+        margin-left: auto;
+      }
+
+      .status {
+        position: relative;
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        min-height: 44px;
+        padding: 6px 12px calc(6px + env(safe-area-inset-bottom));
+        border-top: 1px solid var(--vga-dark-grey);
+      }
+
+      .progress {
+        position: absolute;
+        top: -1px;
+        left: 0;
+        height: 2px;
+        width: 0;
+        background: var(--arch-blue);
+      }
+
+      .brand {
+        color: var(--arch-blue);
+        font-weight: 700;
+        text-decoration: none;
+      }
+
+      .activity {
+        margin: 0;
+        min-width: 0;
+        flex: 1;
+        display: flex;
+        gap: 12px;
+        white-space: nowrap;
+        overflow: hidden;
+      }
+
+      .reading {
+        font-family: var(--path);
+        color: var(--vga-dark-grey);
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      .reading.active {
+        color: var(--vga-grey);
+      }
+
+      .fetched {
+        margin: 0;
+        font-variant-numeric: tabular-nums;
+        white-space: nowrap;
+      }
+
+      .actions {
+        display: flex;
+        gap: 8px;
+      }
+
+      @media (max-width: 640px) {
+        .status {
+          gap: 10px;
+        }
+
+        .fetched,
+        .reading {
+          display: none;
+        }
+
+        .actions button {
+          padding: 4px 8px;
+        }
+      }
+    </style>
+  </body>
+</html>

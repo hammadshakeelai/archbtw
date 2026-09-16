@@ -105,6 +105,8 @@ jobs:
           git config user.email "41898283+github-actions[bot]@users.noreply.github.com"
           git add images.lock.json scripts/packages.lock.json
           git commit -m "Use guest $TAG"
+          # main may have moved on during a long build.
+          git pull --rebase origin "${GITHUB_REF_NAME}"
           git push
 
       # A push made with GITHUB_TOKEN doesn't trigger other workflows, so
