@@ -23,6 +23,17 @@ export const IMAGE_PATHS = {
   state: "arch_state.bin.zst",
 } as const;
 
+/**
+ * Files the page writes into the resumed guest over 9p, read and deleted by
+ * /root/.bash_profile before the visitor's first command.
+ */
+export const GUEST_FILES = {
+  /** Seconds since the epoch, so `date` shows the visitor's time, not the build's. */
+  now: "/etc/archbtw/now",
+  /** Random bytes for $RANDOM and /dev/urandom, which are otherwise the same for every visitor. */
+  seed: "/etc/archbtw/seed",
+} as const;
+
 /** What the snapshot builder waits for: printed by /root/.bash_profile on tty1. */
 export const READY_MARKER = "ARCHBTW_READY";
 

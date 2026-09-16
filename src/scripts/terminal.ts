@@ -123,6 +123,7 @@ const machine = new Machine({
   later: (ms, fn) => {
     setTimeout(fn, ms);
   },
+  randomBytes: (count) => crypto.getRandomValues(new Uint8Array(count)),
   onState: render,
   onRead,
   onScreenSizeChange: () => requestAnimationFrame(fit),

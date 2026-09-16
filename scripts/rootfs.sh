@@ -274,9 +274,14 @@ rm -f "$ROOTFS/etc/machine-id"
 in_chroot systemd-machine-id-setup
 in_chroot passwd -d root >/dev/null
 in_chroot systemctl set-default multi-user.target
+#
+# userdbd and its worker processes answer user-database lookups for
+# systemd-homed and friends, which a single-user guest never makes; they were
+# several MB of every visitor's snapshot.
 for unit in systemd-firstboot.service systemd-homed-firstboot.service systemd-homed.service \
     systemd-timesyncd.service systemd-networkd.service systemd-resolved.service \
-    systemd-networkd-wait-online.service remote-fs.target; do
+    systemd-networkd-wait-online.service remote-fs.target \
+    systemd-userdbd.service systemd-userdbd.socket; do
     in_chroot systemctl mask "$unit" >/dev/null 2>&1 || true
 done
 

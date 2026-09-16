@@ -1,3 +1,4 @@
+import { GUEST_FILES } from "../lib/guest.ts";
 import { releaseModifiers } from "../input/keys.ts";
 import { DownloadMeter, StallWatch } from "./downloads.ts";
 
@@ -27,6 +28,7 @@ export interface Emulator {
   keyboard_send_scancodes(codes: number[]): void;
   keyboard_send_text(text: string): void;
   keyboard_set_enabled(enabled: boolean): void;
+  create_file(file: string, data: Uint8Array): Promise<void>;
   destroy(): Promise<void>;
 }
 
@@ -38,6 +40,8 @@ export interface MachineDeps {
   every(ms: number, fn: () => void): () => void;
   /** Calls `fn` once after `ms` milliseconds. */
   later(ms: number, fn: () => void): void;
+  /** Cryptographically random bytes. */
+  randomBytes(count: number): Uint8Array;
   onState(state: MachineState): void;
   /** The guest read a file over 9p; the first read of a file downloads it. */
   onRead(name: string, bytes: number): void;
@@ -104,7 +108,9 @@ export class Machine {
     });
     emulator.add_listener("download-error", () => this.fail("download"));
     emulator.add_listener("emulator-started", () => {
-      if (this.state.kind === "resuming") this.setState({ kind: "running", downloadedMB: this.meter.megabytes() });
+      if (this.state.kind !== "resuming") return;
+      this.setState({ kind: "running", downloadedMB: this.meter.megabytes() });
+      void this.personalise(emulator);
     });
     emulator.add_listener("9p-read-end", ([name, bytes]) => this.deps.onRead(name, bytes));
     emulator.add_listener("screen-set-size", () => this.deps.onScreenSizeChange());
@@ -143,6 +149,24 @@ export class Machine {
     this.deps.later(MODIFIER_SETTLE_MS, () => {
       if (this.emulator === emulator && !this.keyboardEnabled) emulator?.keyboard_send_scancodes(releaseModifiers());
     });
+  }
+
+  /**
+   * Give this visit its own clock and randomness.
+   *
+   * Every visitor resumes the same snapshot, so every shell would start with
+   * the same random numbers and the clock of the day the guest was built. The
+   * guest's /root/.bash_profile reads these two files before the first
+   * command and deletes them. A guest built before that hook ignores them.
+   */
+  private async personalise(emulator: Emulator): Promise<void> {
+    try {
+      await emulator.create_file(GUEST_FILES.now, new TextEncoder().encode(`${Math.floor(this.deps.now() / 1000)}\n`));
+      // Written last: the guest takes the seed appearing as its signal.
+      await emulator.create_file(GUEST_FILES.seed, this.deps.randomBytes(64));
+    } catch {
+      // No /etc/archbtw in this guest; it keeps the snapshot's clock.
+    }
   }
 
   private fail(error: MachineError): void {

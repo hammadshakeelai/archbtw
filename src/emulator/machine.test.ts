@@ -19,7 +19,13 @@ class FakeEmulator {
   keyboard_send_scancodes(codes: number[]): void {
     this.scancodes.push(codes);
   }
+  files: [string, Uint8Array][] = [];
+  failCreate = false;
   keyboard_send_text(): void {}
+  async create_file(file: string, data: Uint8Array): Promise<void> {
+    if (this.failCreate) throw new Error("FileNotFoundError");
+    this.files.push([file, data]);
+  }
   keyboard_set_enabled(enabled: boolean): void {
     this.keyboardEnabled = enabled;
   }
@@ -52,6 +58,7 @@ function setup(options: { wasm?: boolean } = {}) {
     later: (_ms, fn) => {
       pending.push(fn);
     },
+    randomBytes: (count) => new Uint8Array(count).fill(7),
     onState: (state) => states.push(state),
     onRead: (name, bytes) => reads.push([name, bytes]),
     onScreenSizeChange: () => {},
@@ -97,6 +104,27 @@ describe("Machine", () => {
     expect(states.at(-1)).toEqual({ kind: "resuming", downloadedMB: 4, expectedMB: 16 });
     emulators[0].emit("emulator-started");
     expect(states.at(-1)).toEqual({ kind: "running", downloadedMB: 4 });
+  });
+
+  it("gives the resumed guest the visitor's clock and fresh randomness, seed last", async () => {
+    const { machine, emulators, advance } = setup();
+    advance(1_789_000_000_000);
+    await machine.start({});
+    emulators[0].emit("emulator-started");
+    await Promise.resolve();
+    await Promise.resolve();
+    expect(emulators[0].files.map(([file]) => file)).toEqual(["/etc/archbtw/now", "/etc/archbtw/seed"]);
+    expect(new TextDecoder().decode(emulators[0].files[0][1]).trim()).toBe("1789000000");
+    expect(emulators[0].files[1][1]).toHaveLength(64);
+  });
+
+  it("carries on when the guest has nowhere to put them", async () => {
+    const { machine, states, emulators } = setup();
+    await machine.start({});
+    emulators[0].failCreate = true;
+    emulators[0].emit("emulator-started");
+    await Promise.resolve();
+    expect(states.at(-1)?.kind).toBe("running");
   });
 
   it("passes 9p reads through", async () => {

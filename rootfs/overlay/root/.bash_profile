@@ -17,7 +17,8 @@ if [[ $(tty) == /dev/tty1 ]]; then
         systemctl stop systemd-udevd-kernel.socket systemd-udevd-control.socket systemd-udevd.service 2>/dev/null
         sync
         echo 3 > /proc/sys/vm/drop_caches
-        zero_mb=$(awk '/^MemFree:/ { print int($2 / 1024) - 32 }' /proc/meminfo)
+        # Leave 16 MB for the kernel; memory not zeroed ships in the snapshot.
+        zero_mb=$(awk '/^MemFree:/ { print int($2 / 1024) - 16 }' /proc/meminfo)
         if (( zero_mb > 0 )); then
             mkdir -p /run/archbtw-zero
             if mount -t tmpfs -o "size=${zero_mb}m" tmpfs /run/archbtw-zero; then
@@ -41,4 +42,24 @@ if [[ $(tty) == /dev/tty1 ]]; then
     # prompt. It listens on the serial port; in the browser nobody is
     # listening, so this costs nothing after the snapshot is taken.
     printf 'ARCHBTW_READY\n' > /dev/ttyS0 2>/dev/null
+
+    # Every visitor resumes this same shell, so $RANDOM, the kernel's random
+    # pool and the clock would be identical for all of them. Once the machine
+    # is running the page writes the visitor's time and fresh random bytes to
+    # /etc/archbtw over 9p; take them before the first command, then stop
+    # looking. Set up last, so nothing looks for the files before the snapshot
+    # (the guest would cache that they don't exist).
+    archbtw_personalise() {
+        [[ -z $ARCHBTW_PERSONALISED && -e /etc/archbtw/seed ]] || return 0
+        ARCHBTW_PERSONALISED=1
+        cat /etc/archbtw/seed > /dev/urandom
+        RANDOM=$(od -An -N2 -tu2 /etc/archbtw/seed)
+        [[ -s /etc/archbtw/now ]] && date --set="@$(< /etc/archbtw/now)" > /dev/null
+        rm -f /etc/archbtw/seed /etc/archbtw/now
+    }
+    # The trap has to be removed at the top level: bash undoes changes to the
+    # DEBUG trap made inside a function, including the handler itself.
+    ARCHBTW_PROMPT_COMMAND=${PROMPT_COMMAND-}
+    PROMPT_COMMAND='[[ -n $ARCHBTW_PERSONALISED ]] && { trap - DEBUG; unset -f archbtw_personalise; PROMPT_COMMAND=$ARCHBTW_PROMPT_COMMAND; unset ARCHBTW_PROMPT_COMMAND ARCHBTW_PERSONALISED; }'
+    trap archbtw_personalise DEBUG
 fi
