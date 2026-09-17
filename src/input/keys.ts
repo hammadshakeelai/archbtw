@@ -94,7 +94,11 @@ export function interpretInput(inputType: string, data: string | null): SoftInpu
   }
 }
 
-/** Keydowns a soft keyboard sends when it can't say which key it was. */
+/**
+ * Keydowns a soft keyboard sends when it can't say which key it was.
+ * `keyCode` is deprecated, but 229 is still the only signal some Android
+ * keyboards give, so the check stays.
+ */
 export function isUnidentified(event: Pick<KeyboardEvent, "key" | "keyCode">): boolean {
   return event.keyCode === 229 || event.key === "Unidentified" || event.key === "Process";
 }

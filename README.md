@@ -2,6 +2,8 @@
 
 **A real Arch Linux, running in your browser.** → https://hammadshakeelai.github.io/archbtw/
 
+[![Deploy](https://github.com/hammadshakeelai/archbtw/actions/workflows/deploy.yml/badge.svg)](https://github.com/hammadshakeelai/archbtw/actions/workflows/deploy.yml) [![Live site tests](https://github.com/hammadshakeelai/archbtw/actions/workflows/health.yml/badge.svg)](https://github.com/hammadshakeelai/archbtw/actions/workflows/health.yml)
+
 <p align="center"><a href="https://hammadshakeelai.github.io/archbtw/"><img src="docs/screenshot.png" alt="neofetch running on archbtw: Arch Linux 32 i686, kernel 6.19, 228 pacman packages, on an emulated Pentium III" width="100%"></a></p>
 
 Not a simulated terminal. archbtw boots an actual i686 [Arch Linux 32](https://archlinux32.org) — kernel, systemd, bash, pacman — in the [v86](https://github.com/copy/v86) PC emulator, and drops you at a root shell with a pile of toys already installed:
@@ -36,7 +38,7 @@ After every deploy it's tested against the live site in Chromium, Firefox and We
 | Download the guest, build the site, boot it in Chromium on desktop and Android, deploy to Pages | `.github/workflows/deploy.yml` |
 | Test the live site in Chromium, Firefox and WebKit on desktop, Android, iPhone and iPad; check the manifest still resolves | `.github/workflows/health.yml` |
 
-The design and the reasoning behind it are in [`docs/superpowers/specs/2026-09-16-archbtw-design.md`](docs/superpowers/specs/2026-09-16-archbtw-design.md).
+The design and the reasoning behind it are in [`docs/design.md`](docs/design.md).
 
 ## Development
 
@@ -54,6 +56,8 @@ npm run screenshots                                   # README images and the so
 ```
 
 To change what's installed, edit `scripts/manifest.mjs`, check it with `npm run resolve` (and `npm run why <package>` to see what pulls something in), then run the **Build guest** workflow.
+
+The page resumes a snapshot of the guest's memory, so the emulator that saves it and the one that resumes it must be the same build. The npm `v86` version in `package.json` and `V86_COMMIT` in `scripts/rootfs.sh` always change together, followed by a new guest build; Dependabot leaves `v86` alone for that reason.
 
 ## License
 
