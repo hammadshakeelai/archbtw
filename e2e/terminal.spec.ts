@@ -43,6 +43,22 @@ test.describe("with a hardware keyboard", () => {
       await waitForLine(page, "btw42", 60_000);
     });
 
+    await test.step("keeps the visitor's clock, not the one the snapshot was built with", async () => {
+      await typeKeys(page, "date --iso-8601=seconds\n");
+      await expect
+        .poll(
+          async () => {
+            const stamp = (await guestScreen(page))
+              .split("\n")
+              .map((row) => row.trim())
+              .findLast((row) => /^\d{4}-\d\d-\d\dT\d\d:\d\d:\d\d[+-]\d\d:\d\d$/.test(row));
+            return stamp ? Math.abs(Date.parse(stamp) - Date.now()) / 1000 : Number.POSITIVE_INFINITY;
+          },
+          { timeout: 60_000, intervals: [1_000], message: "seconds between the guest's clock and the real one" },
+        )
+        .toBeLessThan(600);
+    });
+
     await test.step("runs a Perl toy, fetching its files over 9p", async () => {
       await typeKeys(page, "cowsay moo\n");
       await waitForText(page, "< moo >", 240_000);
