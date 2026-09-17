@@ -9,6 +9,7 @@ on:
       - "docs/**"
       - "**/*.md"
       - "LICENSE"
+      - ".github/dependabot.yml"
   workflow_dispatch:
 
 permissions:

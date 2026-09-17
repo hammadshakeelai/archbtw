@@ -12,6 +12,10 @@ updates:
       # with. It moves together with V86_COMMIT in scripts/rootfs.sh and a new
       # guest build, never on its own.
       - dependency-name: v86
+      # astro check (@astrojs/check) accepts TypeScript 5 and 6 only. Take the
+      # next major once it does.
+      - dependency-name: typescript
+        update-types: [version-update:semver-major]
 
   - package-ecosystem: github-actions
     directory: /
