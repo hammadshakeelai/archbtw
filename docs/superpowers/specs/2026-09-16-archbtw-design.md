@@ -234,19 +234,22 @@ CI runner and a real guest. Each is explained where it lives in the code.
 | Tetris from `bsd-games` | `snake`, `worm`, `robots`, `hangman`, `atc`, `adventure` | archlinux32's `bsd-games` has no tetris |
 | Default `mkinitcpio` hooks | `base udev modconf 9p_root` | mkinitcpio 40 defaults to the `systemd` hook, under which the busybox-style `9p_root` handler never runs |
 | Snapshot builder reads VGA memory | Rebuilds the screen from `screen-put-char` events | v86 keeps the text buffer in device memory; `read_memory` returns guest RAM |
-| Canvas text in the VGA ROM font | DOM text rows in JetBrains Mono | After a restore the canvas renderer repainted only the cursor row. DOM text also makes output selectable |
-| ~15 MB snapshot | ~41 MB | The boot's page cache and freed memory were captured. The builder now drops caches and zeroes free memory first; the rest is live kernel and process memory, logged by each build |
+| Canvas text in the VGA ROM font | DOM text rows in the platform's monospace font | After a restore the canvas renderer repainted only the cursor row. DOM text also makes output selectable. Web font subsets omit box-drawing characters, so a web font would misalign `pipes` and `cmatrix` |
+| ~15 MB snapshot | ~32 MB | The boot's page cache and freed memory were captured. The builder drops caches, zeroes free memory and masks systemd-userdbd first (52 → 32 MB); the rest is live kernel and process memory, logged by each build |
 | Commit a package lock | Resolve at build time, commit the result | archlinux32 mirrors delete superseded package files within days |
-| Unsigned packages checked by SHA-256 | Signatures verified against Arch Linux 32's keyring, whose master keys are pinned in `rootfs/trusted-keys.txt` | The repo databases the SHA-256 sums come from are unsigned |
+| Unsigned packages checked by SHA-256 | Every signature verified with gpg before extraction: good signature, signer not revoked, certified by at least three of the master keys pinned in `rootfs/trusted-keys.txt` | The repo databases the SHA-256 sums come from are unsigned. pacman can't do it: master key A50C0F20AEC3AF00 expired on 2026-01-16, leaving one packager's key a certification short of pacman's threshold |
 | — | Every systemd timer masked; udev stopped before the snapshot | A visitor resumes long after the snapshot, the clock jumps, and every daily and weekly timer fires at once, reading hundreds of files over the network |
 | — | `nomodeset`; serial getty masked | Keeps the fast VGA text console; a `ttyS0` console otherwise spawns an unreachable login prompt |
 | — | `Ctrl+]` moves focus out of the terminal | v86 takes every key including Tab, so keyboard users couldn't reach the page controls |
 | — | Modifiers released again 100 ms after the keyboard is handed back | On Windows v86 delays Left Ctrl by 10 ms, which left Ctrl stuck down after `Ctrl+]` |
 | Phone keys forwarded as key codes | Printable phone keys sent as text | Phone keyboards report `$` as the 4 key with no Shift |
+| — | Modifier release never includes Shift | Shift's release code, 0xAA, is also the PS/2 reset byte; Linux reinitialised the keyboard and dropped the key bar's next keys |
+| — | The page writes the visitor's time and 64 random bytes into the resumed guest; a one-shot hook applies them before the first command | Every visitor resumed identical `$RANDOM` state, kernel random pool and build-day clock |
+| Google Fonts | Self-hosted fonts and a Content-Security-Policy | No third party learns who visits; the page may only load from its own origin, plus the WebAssembly compilation and blob worker v86 needs |
 | `health.yml` checks mirrors | `health.yml` runs Chromium, Firefox and WebKit on desktop, Android, iPhone and iPad against the live site, and checks the manifest resolves | Deploys gate on Chromium desktop and Android only, to stay fast |
 
 ### Known limits
 
-- **Bandwidth.** A first visit downloads about 45 MB (emulator plus snapshot), more as toys fetch their files. GitHub Pages' soft limit of 100 GB a month allows roughly two thousand first visits; repeat visits are mostly served from the browser cache.
+- **Bandwidth.** A first visit downloads about 36 MB (emulator plus snapshot), more as toys fetch their files. GitHub Pages' soft limit of 100 GB a month allows roughly two and a half thousand first visits; repeat visits are mostly served from the browser cache.
 - **Background tabs.** Browsers throttle timers in hidden tabs, which slows the emulator to a crawl until the tab is shown again.
 - **Hardware-keyboard layouts.** v86 translates keys by key code, which assumes a US layout.
