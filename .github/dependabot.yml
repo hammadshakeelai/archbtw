@@ -1,0 +1,22 @@
+version: 2
+updates:
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+    groups:
+      patches-and-minors:
+        update-types: [minor, patch]
+    ignore:
+      # The page's emulator must be the build the guest snapshot was saved
+      # with. It moves together with V86_COMMIT in scripts/rootfs.sh and a new
+      # guest build, never on its own.
+      - dependency-name: v86
+
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+    groups:
+      actions:
+        patterns: ["*"]
