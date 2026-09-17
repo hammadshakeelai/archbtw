@@ -131,23 +131,30 @@ test.describe("on a touch screen", () => {
       await waitForLine(page, "tab42", 60_000);
     });
 
-    await test.step("the Ctrl+C key stops a running command", async () => {
+    // Each interrupt starts from a cleared screen, so earlier output scrolling
+    // away can't change what's counted.
+    const sleepOnCleanScreen = async () => {
+      await keyboard.pressSequentially("clear", { delay: 40 });
+      await keyboard.press("Enter");
+      await expect.poll(() => occurrences(page, "^C"), { timeout: 60_000 }).toBe(0);
       await keyboard.pressSequentially("sleep 600", { delay: 40 });
       await keyboard.press("Enter");
       await page.waitForTimeout(1_000);
+    };
+
+    await test.step("the Ctrl+C key stops a running command", async () => {
+      await sleepOnCleanScreen();
       await page.getByRole("button", { name: "Ctrl+C" }).tap();
       await expect.poll(() => occurrences(page, "^C"), { timeout: 60_000 }).toBe(1);
     });
 
     await test.step("sticky Ctrl plus a typed letter stops one too", async () => {
-      await keyboard.pressSequentially("sleep 600", { delay: 40 });
-      await keyboard.press("Enter");
-      await page.waitForTimeout(1_000);
+      await sleepOnCleanScreen();
       const ctrl = page.getByRole("button", { name: "Ctrl", exact: true });
       await ctrl.tap();
       await expect(ctrl).toHaveAttribute("aria-pressed", "true");
       await keyboard.pressSequentially("c");
-      await expect.poll(() => occurrences(page, "^C"), { timeout: 60_000 }).toBe(2);
+      await expect.poll(() => occurrences(page, "^C"), { timeout: 60_000 }).toBe(1);
       await expect(ctrl).toHaveAttribute("aria-pressed", "false");
 
       await keyboard.pressSequentially("echo ok$((1+1))", { delay: 40 });

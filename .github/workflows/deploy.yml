@@ -3,6 +3,12 @@ name: Deploy
 on:
   push:
     branches: [main]
+    # Nothing in these ends up on the site, and every deploy also runs the
+    # whole browser matrix against it.
+    paths-ignore:
+      - "docs/**"
+      - "**/*.md"
+      - "LICENSE"
   workflow_dispatch:
 
 permissions:

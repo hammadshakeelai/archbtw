@@ -27,8 +27,12 @@ export class TextScreen {
 
   /** Payload of `screen-set-size`: [cols, rows, bpp]; bpp is 0 in text mode. */
   resize([width, height, bpp]: [number, number, number]): void {
+    const wasGraphical = this.graphical;
     this.graphical = bpp !== 0;
     if (this.graphical) return;
+    // v86 can announce the same text size again (the console reprogramming the
+    // VGA controller as it scrolls) without redrawing; that erases nothing.
+    if (!wasGraphical && width === this.columns && width * height === this.cells.length) return;
     this.columns = width;
     this.cells = new Array(width * height).fill(0x20);
   }

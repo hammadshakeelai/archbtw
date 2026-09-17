@@ -36,6 +36,21 @@ describe("TextScreen", () => {
     expect(screen.text().trim()).toBe("");
   });
 
+  it("keeps its text when the same text size is announced again", () => {
+    const screen = new TextScreen();
+    write(screen, 3, "^C");
+    screen.resize([80, 25, 0]);
+    expect(screen.rows()[3]).toBe("^C");
+  });
+
+  it("starts blank when text mode returns after a graphics mode", () => {
+    const screen = new TextScreen();
+    write(screen, 0, "old");
+    screen.resize([640, 480, 8]);
+    screen.resize([80, 25, 0]);
+    expect(screen.text().trim()).toBe("");
+  });
+
   it("notes a graphics mode, where there is no text", () => {
     const screen = new TextScreen();
     screen.resize([1024, 768, 32]);
